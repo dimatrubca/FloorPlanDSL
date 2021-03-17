@@ -4,6 +4,7 @@ std::unordered_map<std::string, TokenType> keywords({
 	{"int", INT},
 	{"string", STRING},
 	{"measure", MEASURE},
+	{"color", COLOR},
 	{"room", ROOM},
 	{"window", WINDOW},
 	{"wall", WALL},

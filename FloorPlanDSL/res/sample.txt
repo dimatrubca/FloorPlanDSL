@@ -1,0 +1,4 @@
+    Room(id: a1, size: {10m,10m,10m},
+    angles: {60.0,60.0,60.0},
+    border:{10cm,#000000},
+    position: {10.0m, 10.0m});

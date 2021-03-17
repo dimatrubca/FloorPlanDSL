@@ -7,7 +7,7 @@
 #include <map>
 #include <utility>
 
-#include "Utils.cpp"
+#include "Utils.h"
 #include "Lexer.h"
 #include "LexerError.h"
 

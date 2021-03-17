@@ -15,46 +15,52 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\RegexLexer\FloorPlanDSL\Evaluator.cpp">
+    <ClCompile Include="Evaluator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\RegexLexer\FloorPlanDSL\Lexer.cpp">
+    <ClCompile Include="Lexer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\RegexLexer\FloorPlanDSL\LexerError.cpp">
+    <ClCompile Include="LexerError.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\RegexLexer\FloorPlanDSL\Parser.cpp">
+    <ClCompile Include="Parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\RegexLexer\FloorPlanDSL\rlpl.cpp">
+    <ClCompile Include="rlpl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\RegexLexer\FloorPlanDSL\Token.cpp">
+    <ClCompile Include="Token.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\RegexLexer\FloorPlanDSL\Utils.cpp">
+    <ClCompile Include="Utils.h">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\RegexLexer\FloorPlanDSL\AST.h">
+    <ClInclude Include="AST.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\RegexLexer\FloorPlanDSL\Evaluator.h">
+    <ClInclude Include="Evaluator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\RegexLexer\FloorPlanDSL\Lexer.h">
+    <ClInclude Include="LexerError.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\RegexLexer\FloorPlanDSL\LexerError.h">
+    <ClInclude Include="Object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\RegexLexer\FloorPlanDSL\Object.h">
+    <ClInclude Include="Token.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\RegexLexer\FloorPlanDSL\Token.h">
+    <ClInclude Include="Lexer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Parser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="res\sample.txt" />
   </ItemGroup>
 </Project>

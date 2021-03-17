@@ -4,7 +4,7 @@
 #include <regex>
 #include <iostream>
 #include <map>
-#pragma once
+
 #include "Token.h"
 
 class Lexer {

@@ -18,6 +18,27 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Evaluator.cpp" />
+    <ClCompile Include="Lexer.cpp" />
+    <ClCompile Include="LexerError.cpp" />
+    <ClCompile Include="Parser.cpp" />
+    <ClCompile Include="rlpl.cpp" />
+    <ClCompile Include="Token.cpp" />
+    <ClCompile Include="Utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AST.h" />
+    <ClInclude Include="Evaluator.h" />
+    <ClInclude Include="Lexer.h" />
+    <ClInclude Include="LexerError.h" />
+    <ClInclude Include="Object.h" />
+    <ClInclude Include="Parser.h" />
+    <ClInclude Include="Token.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="res\sample.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -138,23 +159,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\RegexLexer\FloorPlanDSL\Evaluator.cpp" />
-    <ClCompile Include="..\..\RegexLexer\FloorPlanDSL\Lexer.cpp" />
-    <ClCompile Include="..\..\RegexLexer\FloorPlanDSL\LexerError.cpp" />
-    <ClCompile Include="..\..\RegexLexer\FloorPlanDSL\Parser.cpp" />
-    <ClCompile Include="..\..\RegexLexer\FloorPlanDSL\rlpl.cpp" />
-    <ClCompile Include="..\..\RegexLexer\FloorPlanDSL\Token.cpp" />
-    <ClCompile Include="..\..\RegexLexer\FloorPlanDSL\Utils.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\RegexLexer\FloorPlanDSL\AST.h" />
-    <ClInclude Include="..\..\RegexLexer\FloorPlanDSL\Evaluator.h" />
-    <ClInclude Include="..\..\RegexLexer\FloorPlanDSL\Lexer.h" />
-    <ClInclude Include="..\..\RegexLexer\FloorPlanDSL\LexerError.h" />
-    <ClInclude Include="..\..\RegexLexer\FloorPlanDSL\Object.h" />
-    <ClInclude Include="..\..\RegexLexer\FloorPlanDSL\Token.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -23,9 +23,6 @@ public:
 	int value;
 };
 
-C
-
-
 class MEASURE : public Object {
 public:
 	ObjectType getType() { return MEASURE_OBJ; }

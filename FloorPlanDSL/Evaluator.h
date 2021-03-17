@@ -1,5 +1,5 @@
 #pragma once
-
+/*
 class Evaluator {
 public:
 	Evaluator(Enviroment* env);
@@ -7,4 +7,4 @@ public:
 
 private:
 	Enviroment* env;
-}
+}*/

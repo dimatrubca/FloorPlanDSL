@@ -96,10 +96,3 @@ struct Token
 
 TokenType LookUpIdent(std::string ident);
 
-bool isDataType(Token token) {
-     return dataTypes.find(token.type) != dataTypes.end();
-}
-
-bool isStructureName(Token token) {
-     return structures.find(token.type) != structures.end();
-}
