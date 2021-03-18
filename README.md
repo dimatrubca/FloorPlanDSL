@@ -5,7 +5,7 @@ The purpose of the given DSL is to create a friendly and functional environment 
 ## Milestones
 - [x] Lexer
 - [x] AST nodes definition 
-- [ ] Parser (in progress)
+- [x] Parser (in progress)
 - [ ] Object Model (in progress)
 - [ ] Evaluator 
 - [ ] Graphics Rendering
