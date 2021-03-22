@@ -17,7 +17,6 @@ enum class Precendence {
 };
 
 class Parser {
-
 public:
 	Parser(Lexer& lexer);
 
@@ -35,7 +34,7 @@ private:
 
 	StatementNode* parseDeclarationStatement();
 	StatementNode* parseAssignmentStatement();
-	Structure* parseStructureDeclaration();
+	StructureNode* parseStructureDeclaration();
 	ExpressionNode* parseExpression(Precendence precendence);
 
 	ExpressionNode* parseIdentifier();
@@ -50,7 +49,6 @@ private:
 	ExpressionNode* parseIndexExpression();
 	ExpressionNode* parseInfixExpression(ExpressionNode* left);
 	ExpressionNode* parseIndexExpression(ExpressionNode* left);
-
 
 	Precendence peekPrecendence();
 	void addError(std::string c);

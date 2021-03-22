@@ -91,13 +91,13 @@ public:
 
 class MeasureLiteral : public ExpressionNode {
 public:
-	MeasureLiteral(ExpressionNode* valueExpr, ExpressionNode* unit) : valueExpr(valueExpr), unit(unit) {}
-	std::string toString() { return valueExpr->toString() + unit->toString(); };
+	MeasureLiteral(ExpressionNode* valueExpr, TokenType* unit) : valueExpr(valueExpr), unit(unit) {}
+	std::string toString() { return valueExpr->toString() + unit; };
 	AstNodeType getType() { return AstNodeType::FloatLiteral; }
 
 	Token token;
 	ExpressionNode* valueExpr;
-	ExpressionNode* unit;
+	TokenType unit;
 };
 
 
@@ -193,11 +193,19 @@ public:
 };
 
 
-class Structure : public StatementNode {
+class StructureNode : public StatementNode {
 public:
 	std::string toString();
 	AstNodeType getType() { return AstNodeType::Structure; }
 
-	Identifier* name;
+	TokenType structureType;
 	std::vector<PropertyNode*> properties;
+};
+
+//<expression>[<expression>]
+class IndexExpression : public ExpressionNode {
+public:
+	Token token;
+	ExpressionNode* left;
+	ExpressionNode* index;
 };
