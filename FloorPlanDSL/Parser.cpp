@@ -1,4 +1,5 @@
 #include "Parser.h"
+#include "ParserError.h"
 
 Parser::Parser(Lexer& lexer) : lexer(lexer) {
 	// prefix functions
@@ -15,8 +16,8 @@ Parser::Parser(Lexer& lexer) : lexer(lexer) {
 	infixFuncs[SLASH] = parseInfixExpression;
 }
 
-Program* Parser::parseProgram() {
-	Program* program = new Program();
+ProgramNode* Parser::parseProgram() {
+	ProgramNode* program = new ProgramNode(currToken);
 	StatementNode* statement;
 	advance();
 
@@ -41,112 +42,190 @@ Program* Parser::parseProgram() {
 }
 
 StatementNode* Parser::parseDeclarationStatement() {
-	DeclarationStatement* statement = new DeclarationStatement();
+	DeclarationStatementNode* statement = new DeclarationStatementNode(currToken);
 
-	statement->token = currToken;
 	statement->varType = parseIdentifier();
+	requirePeek(IDENTIFIER);
 	statement->varName = parseIdentifier();
+	requirePeek(ASSIGN);
+	advance();
 	statement->value = parseExpression(Precendence::LOWEST);
+	requirePeek(SEMICOLON);
 
 	return statement;
 }
 
+AssignmentStatementNode* Parser::parseAssignmentStatement() {
+	AssignmentStatementNode* statement = new AssignmentStatementNode(currToken);
+
+	requirePeek(IDENTIFIER); // advances, checks, throws error
+	statement->variable = new IdentifierNode(currToken, currToken.literal);
+
+	requirePeek(ASSIGN);
+	advance();
+	statement->value = parseExpression(Precendence::LOWEST);
+	requirePeek(SEMICOLON);
+
+	return statement;
+}
+
+StructureStatementNode* Parser::parseStructureDeclaration() {
+	StructureStatementNode* structure = new StructureStatementNode(currToken, currToken.type);
+
+	requirePeek(LPAREN);
+	while (peekToken.type != RPAREN) {
+		requirePeek(IDENTIFIER);
+		PropertyNode* prop = parsePropertyNode();
+		structure->properties.push_back(prop);
+		
+		if (peekToken.type != RPAREN) requirePeek(COMMA);
+	}
+
+	advance();
+	return structure;
+}
+
+PropertyNode* Parser::parsePropertyNode() {
+	PropertyNode* prop = new PropertyNode(currToken, currToken.type);
+
+	requirePeek(COLON);
+	advance();
+	prop->value = parseExpression(Precendence::LOWEST);
+
+	return prop;
+}
+
+
 ExpressionNode* Parser::parseIdentifier() {
-	return new Identifier(currToken, currToken.literal);
+	return new IdentifierNode(currToken, currToken.literal);
 }
 
 ExpressionNode* Parser::parseIntegerLiteral() {
-	return new IntegerLiteral(currToken, std::stoi(currToken.literal));
+	return new IntegerLiteralNode(currToken, std::stoi(currToken.literal));
 }
 
 // TODO: check currToken.literal for string
 ExpressionNode* Parser::parseStringLiteral() {
-	return new StringLiteral(currToken, currToken.literal);
+	return new StringLiteralNode(currToken, currToken.literal);
 }
 
 ExpressionNode* Parser::parseFloatLiteral() {
-	return new FloatLiteral(currToken, std::stof(currToken.literal));
+	return new FloatLiteralNode(currToken, std::stof(currToken.literal));
 }
 
 ExpressionNode* Parser::parseMeasureLiteral() {
 	ExpressionNode* valueExpr = parseExpression(Precendence::LOWEST);
-	ExpressionNode* unit = parseIdentifier();
+	advance(); // require measure unit()
+	TokenType unitType = currToken.type;
 
-	return new MeasureLiteral(valueExpr, unit);
+	return new MeasureLiteralNode(currToken, valueExpr, unitType);
 }
 
 ExpressionNode* Parser::parseColorLiteral() {
 	std::string hexValue = currToken.literal.substr(1);
 
-	return new ColorLiteral(currToken, hexValue);
+	return new ColorLiteralNode(currToken, hexValue);
 }
 
 ExpressionNode* Parser::parseGroupedExpression() {
-	requireToken(LPAREN);
-	ExpressionNode* expression = parseExpression(Precendence::LOWEST);
-	requireToken(RPAREN);
+	advance();
+	ExpressionNode* exp = parseExpression(Precendence::LOWEST);
+	requirePeek(RPAREN);
+
+	return exp;
 }
 
-
-Structure* Parser::parseStructureDeclaration() {
-	Structure* structure = new Structure();
-
-	// require structure identifier
-	if (structures.find(currToken.type) == structures.end()) {
-		// raise Exception
-	}
-
-	structure->token = currToken;
-	structure->name = parseIdentifier();
-
-	do {
-		PropertyNode* prop = new PropertyNode();
-		prop->name = parseIdentifier();
-		prop->value = parseExpression(Precendence::LOWEST); // TODO: handle array literal
-
-		structure->properties.push_back(prop);
-	} while (currToken.type == COMMA);
-
-	return structure;
+Precendence Parser::currentPrecendence() {
+	if (!hasKey(precendences, currToken.type)) return Precendence::LOWEST;
+	return precendences[currToken.type];
 }
+
 
 Precendence Parser::peekPrecendence() {
 	if (!hasKey(precendences, peekToken.type)) return Precendence::LOWEST; // check return value
 	return precendences[peekToken.type];
 }
 
-ExpressionNode* Parser::parseExpression(Precendence prec) {
+ExpressionNode* Parser::parseExpression(Precendence precendence) {
 	if (!hasKey(prefixFuncs, currToken.type)) {
-		// add error
+		error(currToken, "No prefix function registered for token");
 		return NULL;
 	}
 
-	auto func = prefixFuncs[currToken.type];
-	ExpressionNode* left = func(left);
+	std::function<ExpressionNode* (Parser& const)> prefixFunc = prefixFuncs[currToken.type];
+	ExpressionNode* left = prefixFunc(*this);
 
-	while (true) {
-		Expression* expression = parseInfixExpression(left);
-		// call infix functions with left
+	while (peekToken.type != SEMICOLON && precendence < peekPrecendence()) {
+		if (!hasKey(infixFuncs, peekToken.type)) {
+			return left;
+		}
+
+		auto infixFunc = infixFuncs[peekToken.type];
+		advance();
+		left = infixFunc(*this, left);
 	}
 
 	return left;
 }
 
-
-void Parser::requireSymbol(char symbol) {
+ExpressionNode* Parser::parsePrefixExpression() {
+	auto expr = new PrefixExpressionNode(currToken, currToken.type);
 	advance();
-	if (tokenizer.tokenType() == TokenType::Symbol && tokenizer.symbol() == symbol) {
-		// print
-	}
-	else {
-		error("'" + std::string(1, symbol) + "'");
-	}
+	expr->right = parseExpression(Precendence::PREFIX);
+	
+	return expr;
 }
 
-void Parser::requireToken(TokenType type) {
+ExpressionNode* Parser::parseInfixExpression(ExpressionNode* left) {
+	auto expression = new InfixExpressionNode(currToken, currToken.type, left);
+	auto prec = currentPrecendence();
+
+	advance();
+	expression->right = parseExpression(prec);
+
+	return expression;
+}
+
+// double check this 
+ExpressionNode* Parser::parseArrayLiteral() {
+	auto arrayNode = new ArrayLiteralNode(currToken);
+
+	advance();
+	// inifinite loop check
+	while (currToken.type != RBRACE) {
+		auto expression = parseExpression(Precendence::LOWEST);
+		arrayNode->elements.push_back(expression);
+
+		advance();
+		if (currToken.type != COMMA && currToken.type != RBRACE) {
+			error(currToken, "Invalid character inside array declaration");
+		}
+
+		if (currToken.type == COMMA) advance();
+	}
+
+	return arrayNode;
+}
+
+ExpressionNode* Parser::parseIndexExpression(ExpressionNode* left) {
+	auto expression = new IndexExpressionNode(currToken, left);
+
+	advance();
+	expression->index = parseExpression(Precendence::LOWEST);
+	requirePeek(RBRACKET);
+
+	return expression;
+}
+
+
+void Parser::requirePeek(TokenType type) {
 	advance();
 
 	if (currToken.type != type) {
-		addError("msg");
+		error(currToken, "msg");
 	}
+}
+
+void Parser::error(Token token, std::string message) {
+	throw new ParserError(token, message);
 }

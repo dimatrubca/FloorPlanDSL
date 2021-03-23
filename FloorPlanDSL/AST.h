@@ -13,6 +13,7 @@ enum class AstNodeType {
 	Property,
 	PrefixExpression,
 	InfixExpression,
+	IndexExpression,
 	Identifier,
 	IntLiteral,
 	FloatLiteral,
@@ -22,7 +23,7 @@ enum class AstNodeType {
 	StringLiteral
 };
 
-// declare interfaces as abstract classes
+// declare interfaces as abstract classes with pure virtual functions
 class Node {
 public:
 	virtual std::string toString() = 0;
@@ -44,21 +45,67 @@ public:
 };
 
 
-// root node
-class Program : public Node {
+// Root Node
+class ProgramNode : public Node {
 public:
+	ProgramNode(Token token) : token(token) {};
 	std::string toString();
 	AstNodeType getType() { return AstNodeType::Program; }
 
-
+	Token token; // first token
 	std::vector<StatementNode*> statements;
 };
 
-// expressions
-
-class Identifier : public ExpressionNode {
+class AssignmentStatementNode : public StatementNode {
 public:
-	Identifier(Token token, std::string value): token(token), value(value) {}
+	AssignmentStatementNode(Token token) : token(token) {};
+	std::string toString();
+	AstNodeType getType() { return AstNodeType::AssignmentStatement; }
+
+	Token token;
+	IdentifierNode* variable;
+	ExpressionNode* value;
+};
+
+class DeclarationStatementNode : public StatementNode {
+public:
+	DeclarationStatementNode(Token token) : token(token) {};
+	std::string toString();
+	AstNodeType getType() { return AstNodeType::DeclarationStatement; }
+
+	Token token;
+	IdentifierNode* varType;
+	IdentifierNode* varName;
+	ExpressionNode* value;
+};
+
+class StructureStatementNode : public StatementNode {
+public:
+	StructureStatementNode(Token token, TokenType structureType) : token(token), structureType(structureType) {};
+	std::string toString();
+	AstNodeType getType() { return AstNodeType::Structure; }
+
+	Token token;
+	TokenType structureType;
+	std::vector<PropertyNode*> properties;
+};
+
+
+class PropertyNode : public ExpressionNode {
+public:
+	PropertyNode(Token token, TokenType name) : token(token)m value(value) {};
+	std::string toString();
+	AstNodeType getType() { return AstNodeType::Property; }
+
+	Token token;
+	TokenType name;
+	ExpressionNode* value;
+};
+
+// expressions
+class IdentifierNode : public ExpressionNode {
+public:
+	IdentifierNode(Token token, std::string value): token(token), value(value) {}
 	std::string toString() { return value; }
 	AstNodeType getType() { return AstNodeType::Identifier; }
 
@@ -67,9 +114,9 @@ public:
 };
 
 
-class IntegerLiteral : public ExpressionNode {
+class IntegerLiteralNode : public ExpressionNode {
 public:
-	IntegerLiteral(Token token, int value) : token(token), value(value) {}
+	IntegerLiteralNode(Token token, int value) : token(token), value(value) {}
 	std::string toString() { return std::to_string(value); }
 	AstNodeType getType() { return AstNodeType::IntLiteral; }
 
@@ -78,9 +125,9 @@ public:
 };
 
 
-class FloatLiteral : public ExpressionNode {
+class FloatLiteralNode : public ExpressionNode {
 public:
-	FloatLiteral(Token token, float value) : token(token), value(value) {}
+	FloatLiteralNode(Token token, float value) : token(token), value(value) {}
 	std::string toString() { return std::to_string(value); }
 	AstNodeType getType() { return AstNodeType::FloatLiteral; }
 
@@ -89,9 +136,9 @@ public:
 };
 
 
-class MeasureLiteral : public ExpressionNode {
+class MeasureLiteralNode : public ExpressionNode {
 public:
-	MeasureLiteral(ExpressionNode* valueExpr, TokenType* unit) : valueExpr(valueExpr), unit(unit) {}
+	MeasureLiteralNode(Token token, ExpressionNode* valueExpr, TokenType unit) : token(token), valueExpr(valueExpr), unit(unit) {}
 	std::string toString() { return valueExpr->toString() + unit; };
 	AstNodeType getType() { return AstNodeType::FloatLiteral; }
 
@@ -101,9 +148,9 @@ public:
 };
 
 
-class ColorLiteral : public ExpressionNode {
+class ColorLiteralNode : public ExpressionNode {
 public:
-	ColorLiteral(Token token, std::string value) : token(token), value(value) {}
+	ColorLiteralNode(Token token, std::string value) : token(token), value(value) {}
 	std::string toString() { return "#" + token.literal; }
 	AstNodeType getType() { return AstNodeType::ColorLiteral; }
 
@@ -113,9 +160,9 @@ public:
 
 
 
-class StringLiteral : public ExpressionNode {
+class StringLiteralNode : public ExpressionNode {
 public:
-	StringLiteral(Token token, std::string value) : token(token), value(value) {}
+	StringLiteralNode(Token token, std::string value) : token(token), value(value) {}
 	std::string toString() { return value; }
 	AstNodeType getType() { return AstNodeType::StringLiteral; }
 
@@ -123,35 +170,40 @@ public:
 	std::string value;
 };
 
-class ArrayLiteral : public ExpressionNode {
+class ArrayLiteralNode : public ExpressionNode {
 public:
+	ArrayLiteralNode(Token token) : token(token) {};
 	std::string toString();
 	AstNodeType getType() { return AstNodeType::ArrayLiteral; }
 
+	Token token;
 	std::vector<ExpressionNode*> elements;
 };
 
-class InfixExpression : public ExpressionNode {
+class InfixExpressionNode : public ExpressionNode {
 public:
+	InfixExpressionNode(Token token, TokenType op, ExpressionNode* left) : token(token), op(op), left(left) {};
 	std::string toString();
 	AstNodeType getType() {
 		return AstNodeType::InfixExpression;
 	}
 
-	Token opToken;
+	Token token;
+	TokenType op;
 	ExpressionNode* left;
 	ExpressionNode* right;
 };
 
-class PrefixExpression : public ExpressionNode {
+class PrefixExpressionNode : public ExpressionNode {
 public:
+	PrefixExpressionNode(Token token, TokenType op) : token(token), op(op) {};
 	std::string toString();
 	AstNodeType getType() {
 		return AstNodeType::PrefixExpression;
 	}
 
 	Token token;
-	std::string op;
+	TokenType op;
 	ExpressionNode* right;
 };
 /*
@@ -162,49 +214,21 @@ std::string PrefixExpression::toString() {
 }
 */
 
-class AssignmentStatement : public StatementNode {
-public:
-	std::string toString();
-	AstNodeType getType() { return AstNodeType::AssignmentStatement; }
-
-	Identifier* Name;
-	ExpressionNode* value;
-};
-
-class DeclarationStatement : public StatementNode {
-public:
-	std::string toString();
-	AstNodeType getType() { return AstNodeType::DeclarationStatement; }
-
-	Token token;
-	ExpressionNode* varType;
-	ExpressionNode* varName;
-	ExpressionNode* value;
-};
 
 
-class PropertyNode : public ExpressionNode {
-public:
-	std::string toString();
-	AstNodeType getType() { return AstNodeType::Property; }
-
-	Identifier* name;
-	ExpressionNode* value;
-};
 
 
-class StructureNode : public StatementNode {
-public:
-	std::string toString();
-	AstNodeType getType() { return AstNodeType::Structure; }
 
-	TokenType structureType;
-	std::vector<PropertyNode*> properties;
-};
+
 
 //<expression>[<expression>]
-class IndexExpression : public ExpressionNode {
+class IndexExpressionNode : public ExpressionNode {
 public:
+	IndexExpressionNode(Token token, ExpressionNode* left) : token(token), left(left) {};
+	std::string toString();
+	AstNodeType getType() {
+		return AstNodeType::IndexExpression;
+	}
 	Token token;
 	ExpressionNode* left;
 	ExpressionNode* index;

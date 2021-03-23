@@ -16,6 +16,7 @@ const ObjectType ROOM_OBJ = "ROOM";
 const ObjectType WALL_OBJ = "WALL";
 const ObjectType DOOR_OBJ = "DOOR";
 const ObjectType NULL_OBJ = "NULL";
+const ObjectType ERROR_OBJ = "ERROR_OBJ";
 
 class Object {
 public:
@@ -33,7 +34,24 @@ public:
 	void print() { std::cout << value; };
 
 	int value;
+
+	Integer* operator+(const Integer& first) const
+	{
+		return new Integer(value + first.value);
+	}
+
+	Integer* operator-(const Integer& first) const
+	{
+		return new Integer(first.value - value); // TODO: double check order
+	}
+
+	Integer* operator*(const Integer& first) const
+	{
+		return new Integer(first.value * value);
+	}
 };
+
+
 
 
 class Float : public Object {
@@ -47,10 +65,21 @@ public:
 
 class Measure : public Object {
 public:
+	Measure(float valueMm) : Object(MEASURE_OBJ), value(valueMm) {};
 	Measure(float value, TokenType unit);
 	void print() { std::cout << value; };
 
 	float value; // value in mm
+
+	Measure* operator+(const Measure& first) const
+	{
+		return new Measure(value + first.value);
+	}
+
+	Measure* operator-(const Measure& first) const
+	{
+		return new Measure(first.value - value); // TODO: double check order
+	}
 };
 
 

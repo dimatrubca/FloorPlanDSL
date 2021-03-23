@@ -21,20 +21,19 @@ public:
 	Parser(Lexer& lexer);
 
 	void advance();
-	Program* parseProgram();
-	std::vector<std::string> getErrors();
+	ProgramNode* parseProgram();
 private:
 	Lexer lexer;
 	Token currToken;
 	Token peekToken;
-	std::vector<std::string> errors;
 	std::map < TokenType, std::function<ExpressionNode* (Parser& const)>> prefixFuncs;
 	std::map < TokenType, std::function<ExpressionNode* (Parser& const, ExpressionNode*)>> infixFuncs;
 	std::map <TokenType, Precendence> precendences;
 
 	StatementNode* parseDeclarationStatement();
-	StatementNode* parseAssignmentStatement();
-	StructureNode* parseStructureDeclaration();
+	AssignmentStatementNode* parseAssignmentStatement();
+	StructureStatementNode* parseStructureDeclaration();
+	PropertyNode* parsePropertyNode();
 	ExpressionNode* parseExpression(Precendence precendence);
 
 	ExpressionNode* parseIdentifier();
@@ -46,12 +45,11 @@ private:
 	ExpressionNode* parsePrefixExpression();
 	ExpressionNode* parseArrayLiteral();
 	ExpressionNode* parseGroupedExpression();
-	ExpressionNode* parseIndexExpression();
 	ExpressionNode* parseInfixExpression(ExpressionNode* left);
 	ExpressionNode* parseIndexExpression(ExpressionNode* left);
 
+	Precendence currentPrecendence();
 	Precendence peekPrecendence();
-	void addError(std::string c);
-	void requireSymbol(char c);
-	void requireToken(TokenType token);
+	void error(Token token, std::string c);
+	void requirePeek(TokenType token);
 };
