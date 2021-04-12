@@ -36,6 +36,8 @@ const TokenType INT = "INT";
 const TokenType STRING = "STRING";
 const TokenType MEASURE = "MEASURE";
 const TokenType COLOR = "COLOR";
+const TokenType FLOAT = "FLOAT";
+const TokenType LIST = "LIST";
 
 const TokenType ROOM = "ROOM";
 const TokenType WINDOW = "WINDOW";
@@ -82,6 +84,7 @@ extern std::unordered_map<std::string, TokenType> keywords;
 extern std::set<TokenType> structures;
 extern std::set<TokenType> roomProps;
 extern std::set<TokenType> dataTypes;
+extern std::set<TokenType> measureUnits;
 
 
 struct Token
@@ -92,8 +95,11 @@ struct Token
      int col;
 
      Token() {}
+     Token(int line, int col): line(line), col(col) {}
      Token(const std::string& literal, TokenType type, int line, int col) : literal(literal), type(type), line(line), col(col) {}
      Token(char ch, TokenType type, int line, int col) : literal(std::string(1, ch)), type(type), line(line), col(col) {}
+
+     operator std::string() const { return literal + ", type: " + type + ", line: " + std::to_string(line) + ", col: " + std::to_string(col); }
 };
 
 TokenType LookUpIdent(std::string ident);

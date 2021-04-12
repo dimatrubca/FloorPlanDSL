@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 #include <iostream>
+#include <sstream>
+#include <map>
 
 #include "Utils.h"
 
@@ -22,7 +24,7 @@ class Object {
 public:
 	Object(ObjectType type) : type(type) {};
 	ObjectType getType() { return type; };
-	virtual void print() = 0;
+	virtual std::string toString() = 0;
 
 private:
 	ObjectType type;
@@ -31,33 +33,37 @@ private:
 class Integer : public Object {
 public:
 	Integer(int value) : Object(INTEGER_OBJ), value(value) {};
-	void print() { std::cout << value; };
+	std::string toString() { return std::to_string(value); };
 
 	int value;
 
-	Integer* operator+(const Integer& first) const
+	Integer* operator+(const Integer& right) const
 	{
-		return new Integer(value + first.value);
+		return new Integer(value + right.value);
 	}
 
-	Integer* operator-(const Integer& first) const
+	Integer* operator-(const Integer& right) const
 	{
-		return new Integer(first.value - value); // TODO: double check order
+		return new Integer(value - right.value);
 	}
 
-	Integer* operator*(const Integer& first) const
+	Integer* operator*(const Integer& right) const
 	{
-		return new Integer(first.value * value);
+		return new Integer(value * right.value);
 	}
 };
 
 
 
 
-class Float : public Object {
+class FloatObject : public Object {
 public:
-	Float(float value) : Object(FLOAT_OBJ), value(value) {};
-	void print() { std::cout << value; };
+	FloatObject(float value) : Object(FLOAT_OBJ), value(value) {};
+	std::string toString() { return std::to_string(value); };
+
+	static FloatObject* intToFloat(Integer* intObj) {
+		return new FloatObject(intObj->value);
+	}
 
 	float value;
 };
@@ -67,7 +73,7 @@ class Measure : public Object {
 public:
 	Measure(float valueMm) : Object(MEASURE_OBJ), value(valueMm) {};
 	Measure(float value, TokenType unit);
-	void print() { std::cout << value; };
+	std::string toString() { return std::to_string(value) + " mm"; };
 
 	float value; // value in mm
 
@@ -82,42 +88,49 @@ public:
 	}
 };
 
+class Color : public Object {
+public:
+	Color(std::string code) : Object(COLOR_OBJ), hexCode(code) {};
+	std::string toString() { return hexCode; };
 
-Measure::Measure(float value, TokenType unitType) : Object(MEASURE_OBJ) {
-	float convertFactor = 1;
+	std::string hexCode;
+};
 
-	if (unitType == MEASURE_UNIT_CM) {
-		convertFactor = 10;
-	} else if (unitType == MEASURE_UNIT_DM) {
-		convertFactor = 100;
-	}
-	else if (unitType == MEASURE_UNIT_MM) {
-		convertFactor = 1000;
-	}
 
-	this->value = value * convertFactor;
-}
+class String : public Object {
+public:
+	String(std::string value) : Object(STRING_OBJ), value(value) {};
+	std::string toString() { return value; };
+
+	std::string value;
+};
+
 
 struct Border {
-	Border(Measure width, Color color) : width(width), color(color) {};
-	Measure width;
-	Color color;
+	Border(Measure* width, Color* color) : width(width), color(color) {};
+	Measure* width;
+	Color* color;
+
+	std::string toString() { return "{" + width->toString() + ", " + color->toString() + "}"; };
 };
 
 struct Position {
-	Position(Measure x, Measure y) : x(x), y(y) {};
-	Measure x;
-	Measure y;
+	Position(Measure* x, Measure* y) : x(x), y(y) {};
+	Measure* x;
+	Measure* y;
+
+	std::string toString() { return "{" + x->toString() + ", " + y->toString() + "}"; };
 };
 
 class Room : public Object {
 public:
 	Room(std::map<TokenType, Object*> params);
+	std::string toString();
 
 	// properties
 	std::string id;
-	std::vector<Measure> size;
-	std::vector<Float> angles;
+	std::vector<Measure*> size;
+	std::vector<FloatObject*> angles;
 	Border* border;
 	Position* position;
 };
@@ -125,6 +138,7 @@ public:
 class Wall : public Object {
 public:
 	Wall(std::map<TokenType, Object*> params);
+	std::string toString() {return "Wall"; };
 
 	// properties
 	Position start;
@@ -135,6 +149,7 @@ public:
 class Window : public Object {
 public:
 	Window(std::map<TokenType, Object*> params);
+	std::string toString() { return "Window"; };
 
 	//
 	int wall;
@@ -142,67 +157,28 @@ public:
 	Measure End;
 };
 
-Room::Room(std::map<TokenType, Object*> params) : Object(ROOM_OBJ) {
-	if (hasKey(params, SIZE_PROP)) {
-		Array& sizeArray = dynamic_cast<Array&>(*params[SIZE_PROP]);
-
-		for (auto elem : sizeArray.elements) {
-			Measure& length = dynamic_cast<Measure&>(*elem);
-			size.push_back(length);
-		}
-	} 
-
-	if (hasKey(params, ANGLES_PROP)) {
-		Array& anglesArray = dynamic_cast<Array&>(*params[ANGLES_PROP]);
-
-		for (auto elem : anglesArray.elements) {
-			Float& angle = dynamic_cast<Float&>(*elem);
-			angles.push_back(angle);
-		}
-
-		if (angles.size() != size.size()) {
-			// throw new exception
-		}
-	}
-
-	if (hasKey(params, BORDER_PROP)) {
-		Array& borderArray = dynamic_cast<Array&>(*params[BORDER_PROP]);
-		Measure& width = dynamic_cast<Measure&>(*borderArray.elements[0]);
-		Color& color = dynamic_cast<Color&>(*borderArray.elements[1]);
-
-		border = new Border(width, color);
-	}
-
-	if (hasKey(params, POSITION_PROP)) {
-		Array& positionsArray = dynamic_cast<Array&>(*params[POSITION_PROP]);
-		Measure& x = dynamic_cast<Measure&>(*positionsArray.elements[0]);
-		Measure& y = dynamic_cast<Measure&>(*positionsArray.elements[1]);
-
-		position = new Position(x, y);
-	}
-
-};
-
-
-class Color : public Object {
-	Color(std::string code) : Object(COLOR_OBJ), hexCode(code) {};
-	void print() { std::cout << hexCode; };
-
-	std::string hexCode;
-};
 
 class Array : public Object {
 public:
 	Array() : Object(ARRAY_OBJ) {};
-	void print() {
-		std::cout << "[";
+	std::string toString() {
+		std::stringstream ss;
+		ss << "[";
+		bool first = true;
 		for (auto elem : elements) {
-			elem->print();
-
-			std::cout << ", ";
+			if (!first) ss << ", ";
+			ss << elem->toString();
+			first = false;
 		}
-		std::cout << "]";
+		ss << "]";
+
+		return ss.str();
 	}
 
 	std::vector<Object*> elements;
+};
+
+class MyError2 : public Object {
+public:
+	MyError2() : Object(ERROR_OBJ) {};
 };

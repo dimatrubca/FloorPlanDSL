@@ -17,9 +17,20 @@ char Lexer::peekChar() {
      else return 0;
 }
 
+void Lexer::seek(int offSet) {
+     readPosition = col = offSet;
+     ch = input[readPosition];
+
+     position = readPosition;
+     readPosition++;
+}
+
 void Lexer::readChar() {
      if (readPosition >= input.size()) ch = 0;
      else ch = input[readPosition];
+
+     if (ch == '\n') line++, col=0;
+     else col++;
 
      position = readPosition;
      readPosition++;
@@ -34,10 +45,11 @@ std::string Lexer::readIdentifier() {
      return input.substr(start, position - start);
 }
 
+// while inf
 Token Lexer::readNumber() {
      int start = position;
      std::string literal = "";
-     Token tok;
+     Token tok(line, col);
      tok.type = INT_LITERAL;
 
      while (isDigit(ch)) {
@@ -56,6 +68,20 @@ Token Lexer::readNumber() {
      tok.literal = input.substr(start, position - start);
 
      return tok;
+}
+
+// whiel infinite
+std::string Lexer::readHexCode() {
+     Token tok;
+     int start = position;
+     
+     if (ch == '#') readChar();
+     while (isAlpha(ch)) {
+          readChar();
+     }
+
+     return input.substr(start, position - start);
+     
 }
 
 void Lexer::skipWhitespace() {
@@ -77,7 +103,7 @@ void Lexer::SetInput(std::string& input) {
 
 
 Token Lexer::NextToken() {
-     Token tok;
+     Token tok(line, col);
      skipWhitespace();
 
      switch (ch) {
@@ -129,13 +155,29 @@ Token Lexer::NextToken() {
           tok = Token(ch, RBRACE, line, col);
           readChar();
           break;
-     case '"':
-          tok = Token(ch, STRING_LITERAL, line, col);
-          readChar();
+     case '"': {
+          int endStringPos = input.find('"', position + 1);
+
+          if (endStringPos == std::string::npos)
+          {
+               tok = Token(ch, ILLEGAL, line, col);
+               readChar();
+          }
+          else {
+               // check
+               std::string str = input.substr(position + 1, endStringPos - position - 1);
+               tok = Token(str, STRING_LITERAL, line, col);
+               seek(endStringPos + 1);
+          }
           break;
+     };
+          
      case '#':
-          tok = Token(ch, COLOR_LITERAL, line, col);
-          readChar();
+          tok = Token(readHexCode(), COLOR_LITERAL, line, col);
+
+          if (tok.literal.size() != 4 && tok.literal.size() != 7) {
+               tok.type == ILLEGAL;
+          }
           break;
      case 0:
           tok = Token("", END, line, col);

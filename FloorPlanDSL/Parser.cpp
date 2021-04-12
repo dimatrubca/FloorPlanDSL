@@ -1,25 +1,40 @@
 #include "Parser.h"
-#include "ParserError.h"
+
 
 Parser::Parser(Lexer& lexer) : lexer(lexer) {
+	advance();
+	advance();
+
 	// prefix functions
-	prefixFuncs[IDENTIFIER] = parseIdentifier;
-	prefixFuncs[INT_LITERAL] = parseIntegerLiteral;
-	prefixFuncs[STRING_LITERAL] = parseStringLiteral;
-	prefixFuncs[LBRACE] = parseArrayLiteral;
-	prefixFuncs[MINUS] = parsePrefixExpression;
-	prefixFuncs[LPAREN] = parseGroupedExpression;
+	prefixFuncs[IDENTIFIER] = &Parser::parseIdentifier;
+	prefixFuncs[INT_LITERAL] = &Parser::parseIntegerLiteral;
+	prefixFuncs[FLOAT_LITERAL] = &Parser::parseFloatLiteral;
+	prefixFuncs[COLOR_LITERAL] = &Parser::parseColorLiteral;
+	prefixFuncs[STRING_LITERAL] = &Parser::parseStringLiteral;
+	prefixFuncs[LBRACE] = &Parser::parseArrayLiteral;
+	prefixFuncs[MINUS] = &Parser::parsePrefixExpression;
+	prefixFuncs[LPAREN] = &Parser::parseGroupedExpression;
 
 	// infix functions
-	infixFuncs[MINUS] = parseInfixExpression;
-	infixFuncs[PLUS] = parseInfixExpression;
-	infixFuncs[SLASH] = parseInfixExpression;
+	infixFuncs[MINUS] = &Parser::parseInfixExpression;
+	infixFuncs[PLUS] = &Parser::parseInfixExpression;
+	infixFuncs[SLASH] = &Parser::parseInfixExpression;
+	infixFuncs[ASTERISK] = &Parser::parseInfixExpression;
+	infixFuncs[LPAREN] = &Parser::parseCallExpression;
+	infixFuncs[LBRACKET] = &Parser::parseIndexExpression;
+
+	// precendences ???
+	precendences[PLUS] = Precendence::SUM;
+	precendences[MINUS] = Precendence::SUM;
+	precendences[SLASH] = Precendence::PRODUCT;
+	precendences[ASTERISK] = Precendence::PRODUCT;
+	precendences[LBRACKET] = Precendence::INDEX;
+	precendences[LPAREN] = Precendence::CALL;
 }
 
 ProgramNode* Parser::parseProgram() {
 	ProgramNode* program = new ProgramNode(currToken);
 	StatementNode* statement;
-	advance();
 
 	while (currToken.type != END) {
 		if (isDataType(currToken)) {
@@ -28,29 +43,42 @@ ProgramNode* Parser::parseProgram() {
 		else if (isStructureName(currToken)) {
 			statement = parseStructureDeclaration();
 		}
-		else if (currToken.type == IDENTIFIER) {
+		else if (currToken.type == IDENTIFIER && peekToken.type == ASSIGN) {
 			statement = parseAssignmentStatement();
 		}
 		else {
-
+			statement = parseExpressionStatement();
 		}
 
-		program->statements.push_back(statement);
+		if (statement) program->statements.push_back(statement);
+		advance();
 	}
 
 	return program;
 }
 
+ExpressionStatementNode* Parser::parseExpressionStatement() {
+	ExpressionStatementNode* statement = new ExpressionStatementNode(currToken);
+
+	statement->expression = parseExpression(Precendence::LOWEST, 0);
+
+	if (!expectPeek(SEMICOLON)) {
+		return nullptr;
+	}
+
+	return statement;
+}
+
 StatementNode* Parser::parseDeclarationStatement() {
 	DeclarationStatementNode* statement = new DeclarationStatementNode(currToken);
-
-	statement->varType = parseIdentifier();
-	requirePeek(IDENTIFIER);
-	statement->varName = parseIdentifier();
-	requirePeek(ASSIGN);
+	
+	statement->dataType = currToken.type;
+	if (!expectPeek(IDENTIFIER)) return nullptr;
+	statement->varName = new IdentifierNode(currToken, currToken.literal);
+	if (!expectPeek(ASSIGN)) return nullptr;
 	advance();
-	statement->value = parseExpression(Precendence::LOWEST);
-	requirePeek(SEMICOLON);
+	statement->value = parseExpression(Precendence::LOWEST, 0);
+	if (!expectPeek(SEMICOLON)) return nullptr;
 
 	return statement;
 }
@@ -58,13 +86,12 @@ StatementNode* Parser::parseDeclarationStatement() {
 AssignmentStatementNode* Parser::parseAssignmentStatement() {
 	AssignmentStatementNode* statement = new AssignmentStatementNode(currToken);
 
-	requirePeek(IDENTIFIER); // advances, checks, throws error
-	statement->variable = new IdentifierNode(currToken, currToken.literal);
+	statement->varName = new IdentifierNode(currToken, currToken.literal);
 
-	requirePeek(ASSIGN);
+	if (!expectPeek(ASSIGN)) return nullptr;
 	advance();
-	statement->value = parseExpression(Precendence::LOWEST);
-	requirePeek(SEMICOLON);
+	statement->value = parseExpression(Precendence::LOWEST, 0);
+	if (!expectPeek(SEMICOLON)) return nullptr;
 
 	return statement;
 }
@@ -72,25 +99,27 @@ AssignmentStatementNode* Parser::parseAssignmentStatement() {
 StructureStatementNode* Parser::parseStructureDeclaration() {
 	StructureStatementNode* structure = new StructureStatementNode(currToken, currToken.type);
 
-	requirePeek(LPAREN);
+	if (!expectPeek(LPAREN)) return nullptr;
 	while (peekToken.type != RPAREN) {
-		requirePeek(IDENTIFIER);
+		requirePeekPropertyOf(ROOM);
 		PropertyNode* prop = parsePropertyNode();
 		structure->properties.push_back(prop);
 		
-		if (peekToken.type != RPAREN) requirePeek(COMMA);
+		if (peekToken.type != RPAREN && !expectPeek(COMMA)) return nullptr;
 	}
 
-	advance();
+	if (!expectPeek(RPAREN)) return nullptr;
+	if (!expectPeek(SEMICOLON)) return nullptr;
+
 	return structure;
 }
 
 PropertyNode* Parser::parsePropertyNode() {
 	PropertyNode* prop = new PropertyNode(currToken, currToken.type);
 
-	requirePeek(COLON);
+	if (!expectPeek(COLON)) return nullptr;
 	advance();
-	prop->value = parseExpression(Precendence::LOWEST);
+	prop->value = parseExpression(Precendence::LOWEST, 0);
 
 	return prop;
 }
@@ -101,7 +130,17 @@ ExpressionNode* Parser::parseIdentifier() {
 }
 
 ExpressionNode* Parser::parseIntegerLiteral() {
-	return new IntegerLiteralNode(currToken, std::stoi(currToken.literal));
+	int value;
+
+	try {
+		value = stoi(currToken.literal);
+	}
+	catch (const std::exception& e) {
+		error(currToken, "Coudn't parse " + currToken.literal + " as integer");
+		return nullptr;
+	}
+
+	return new IntegerLiteralNode(currToken, value);
 }
 
 // TODO: check currToken.literal for string
@@ -110,11 +149,21 @@ ExpressionNode* Parser::parseStringLiteral() {
 }
 
 ExpressionNode* Parser::parseFloatLiteral() {
-	return new FloatLiteralNode(currToken, std::stof(currToken.literal));
+	double value;
+
+	try {
+		value = stof(currToken.literal);
+	}
+	catch (const std::exception& e) {
+		error(currToken, "Coudn't parse " + currToken.literal + " as float");
+		return nullptr;
+	}
+
+	return new FloatLiteralNode(currToken, value);
 }
 
 ExpressionNode* Parser::parseMeasureLiteral() {
-	ExpressionNode* valueExpr = parseExpression(Precendence::LOWEST);
+	ExpressionNode* valueExpr = parseExpression(Precendence::LOWEST, 1);
 	advance(); // require measure unit()
 	TokenType unitType = currToken.type;
 
@@ -129,8 +178,8 @@ ExpressionNode* Parser::parseColorLiteral() {
 
 ExpressionNode* Parser::parseGroupedExpression() {
 	advance();
-	ExpressionNode* exp = parseExpression(Precendence::LOWEST);
-	requirePeek(RPAREN);
+	ExpressionNode* exp = parseExpression(Precendence::LOWEST,0);
+	if (!expectPeek(RPAREN)) return nullptr;
 
 	return exp;
 }
@@ -146,13 +195,16 @@ Precendence Parser::peekPrecendence() {
 	return precendences[peekToken.type];
 }
 
-ExpressionNode* Parser::parseExpression(Precendence precendence) {
+ExpressionNode* Parser::parseExpression(Precendence precendence, bool parsingMeasure) {
 	if (!hasKey(prefixFuncs, currToken.type)) {
 		error(currToken, "No prefix function registered for token");
 		return NULL;
 	}
 
 	std::function<ExpressionNode* (Parser& const)> prefixFunc = prefixFuncs[currToken.type];
+	// check exception
+	if (!parsingMeasure && (currToken.type == INT_LITERAL || currToken.type == FLOAT_LITERAL) && isMeasureUnit(peekToken)) prefixFunc = &Parser::parseMeasureLiteral;
+
 	ExpressionNode* left = prefixFunc(*this);
 
 	while (peekToken.type != SEMICOLON && precendence < peekPrecendence()) {
@@ -171,7 +223,7 @@ ExpressionNode* Parser::parseExpression(Precendence precendence) {
 ExpressionNode* Parser::parsePrefixExpression() {
 	auto expr = new PrefixExpressionNode(currToken, currToken.type);
 	advance();
-	expr->right = parseExpression(Precendence::PREFIX);
+	expr->right = parseExpression(Precendence::PREFIX, 0);
 	
 	return expr;
 }
@@ -181,51 +233,92 @@ ExpressionNode* Parser::parseInfixExpression(ExpressionNode* left) {
 	auto prec = currentPrecendence();
 
 	advance();
-	expression->right = parseExpression(prec);
+	expression->right = parseExpression(prec, 0);
 
 	return expression;
 }
+
+ExpressionNode* Parser::parseCallExpression(ExpressionNode* function) {
+	auto expression = new CallExpressionNode(currToken, function);
+	expression->arguments = parseExpressionList(RPAREN);
+	
+	return expression;
+}
+
 
 // double check this 
 ExpressionNode* Parser::parseArrayLiteral() {
 	auto arrayNode = new ArrayLiteralNode(currToken);
 
-	advance();
-	// inifinite loop check
-	while (currToken.type != RBRACE) {
-		auto expression = parseExpression(Precendence::LOWEST);
-		arrayNode->elements.push_back(expression);
-
-		advance();
-		if (currToken.type != COMMA && currToken.type != RBRACE) {
-			error(currToken, "Invalid character inside array declaration");
-		}
-
-		if (currToken.type == COMMA) advance();
-	}
+	arrayNode->elements = parseExpressionList(RBRACE);
 
 	return arrayNode;
+}
+
+
+// '(1, a+2, 3)', {1, 2, 3}
+std::vector<ExpressionNode*> Parser::parseExpressionList(TokenType end) {
+	std::vector<ExpressionNode*> args;
+
+	advance();
+
+	if (currToken.type == end) {
+		return args;
+	}
+
+	args.push_back(parseExpression(Precendence::LOWEST, 0));
+
+	while (peekToken.type == COMMA) {
+		advance();
+		advance();
+		args.push_back(parseExpression(Precendence::LOWEST, 0));
+	}
+
+	if (!expectPeek(end)) {
+		return std::vector<ExpressionNode*>();
+	}
+
+	return args;
 }
 
 ExpressionNode* Parser::parseIndexExpression(ExpressionNode* left) {
 	auto expression = new IndexExpressionNode(currToken, left);
 
 	advance();
-	expression->index = parseExpression(Precendence::LOWEST);
-	requirePeek(RBRACKET);
+	expression->index = parseExpression(Precendence::LOWEST, 0);
+	if (!expectPeek(RBRACKET)) return nullptr;
 
 	return expression;
 }
 
 
-void Parser::requirePeek(TokenType type) {
+bool Parser::expectPeek(TokenType type) {
 	advance();
 
 	if (currToken.type != type) {
-		error(currToken, "msg");
+		error(currToken, "Expected next token to be " + type + ", got " + currToken.type);
+		return false;
 	}
+
+	return true;
 }
 
+void Parser::requirePeekPropertyOf(TokenType structureType) {
+	advance();
+}
+ 
 void Parser::error(Token token, std::string message) {
-	throw new ParserError(token, message);
+	ParserError* err = new ParserError(token, message);
+	errors.push_back(err);
+}
+
+void Parser::advance() {
+	currToken = peekToken;
+	peekToken = lexer.NextToken();
+	//std::cout << "advancing...\n";
+	//std::cout << std::string(currToken)<<'\n';
+}
+
+std::vector<ParserError*> Parser::getErrors() {
+	return errors;
 }

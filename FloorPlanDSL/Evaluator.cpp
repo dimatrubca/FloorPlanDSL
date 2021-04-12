@@ -2,11 +2,15 @@
 
 #include "Object.h"
 #include "Evaluator.h"
+#include "Utils.h"
 
+Evaluator::Evaluator(Enviroment* env) {
+	this->env = env;
+}
 
 Object* Evaluator::eval(Node* node) {
 	if (auto program = dynamic_cast<ProgramNode*>(node)) {
-		evalProgram(program);
+		return evalProgram(program);
 	}
 
 	if (auto statement = dynamic_cast<AssignmentStatementNode*>(node)) {
@@ -17,18 +21,44 @@ Object* Evaluator::eval(Node* node) {
 		return evalDeclarationStatement(statement);
 	}
 
-	if (auto structure = dynamic_cast<StructureStatementNode*>(node)) {
-
-		return evalStructureStatement(structure);
+	if (auto statement = dynamic_cast<ExpressionStatementNode*>(node)) {
+		return evalExpressionStatement(statement);
 	}
 
-	if (auto prop = dynamic_cast<PropertyNode*>(node)) {
-		return evalPropertyNode(prop);
+	if (auto prefixNode = dynamic_cast<PrefixExpressionNode*>(node)) {
+		Object* right  = eval(prefixNode->right);
+
+		return evalPrefixExpression(prefixNode->op, right);
+	}
+
+	if (auto infixNode = dynamic_cast<InfixExpressionNode*>(node)) {
+		Object* left = eval(infixNode->left);
+		Object* right = eval(infixNode->right);
+
+		return evalInfixExpression(infixNode->op, left, right);
 	}
 
 	if (auto intNode = dynamic_cast<IntegerLiteralNode*>(node)) {
 		return evalIntLiteral(intNode);
 	}
+
+	if (auto arrayNode = dynamic_cast<ArrayLiteralNode*>(node)) {
+		return evalArrayLiteral(arrayNode);
+	}
+	
+	if (auto structure = dynamic_cast<StructureStatementNode*>(node)) {
+
+		return evalStructureStatement(structure);
+	}
+	/*
+	if (auto prop = dynamic_cast<PropertyNode*>(node)) {
+		return evalPropertyNode(prop);
+	}*/
+
+	if (auto identNode = dynamic_cast<IdentifierNode*>(node)) {
+		return evalIdentifier(identNode);
+	}
+
 
 	if (auto floatNode = dynamic_cast<FloatLiteralNode*>(node)) {
 		return evalFloatLiteral(floatNode);
@@ -38,18 +68,34 @@ Object* Evaluator::eval(Node* node) {
 		return evalMeasureLiteral(measureNode);
 	}
 
+	if (auto stringNode = dynamic_cast<StringLiteralNode*>(node)) {
+		return evalStringLiteral(stringNode);
+	}
+
 	if (auto colorNode = dynamic_cast<ColorLiteralNode*>(node)) {
 		return evalColorLiteral(colorNode);
 	}
+
+	if (auto indexNode = dynamic_cast<IndexExpressionNode*>(node)) {
+		return evalIndexExpression(indexNode);
+	}
+	return nullptr;
 
 }
 
 
 Object* Evaluator::evalProgram(ProgramNode* program) {
+	Object* result = nullptr;
+
 	for (StatementNode* statement : program->statements) {
-		evalStatement(statement);
+		result = eval(statement);
 	}
 
+	return result;
+};
+
+Object* Evaluator::evalExpressionStatement(ExpressionStatementNode* stmt) {
+	return eval(stmt->expression);
 }
 
 Object* Evaluator::evalDeclarationStatement(DeclarationStatementNode* stmt) {
@@ -66,7 +112,7 @@ Object* Evaluator::evalDeclarationStatement(DeclarationStatementNode* stmt) {
 
 Object* Evaluator::evalAssignmentStatement(AssignmentStatementNode* stmt) {
 	Object* valueObj = eval(stmt->value);
-	std::string varName = stmt->variable->value;
+	std::string varName = stmt->varName->value;
 
 	if (valueObj->getType() == ERROR_OBJ) {
 		// raise error
@@ -80,91 +126,151 @@ Object* Evaluator::evalAssignmentStatement(AssignmentStatementNode* stmt) {
 	env->set(varName, valueObj);
 
 	return valueObj;
-}
+};
 
-Object* Evaluator::evalStructureStatement(StructureStatementNode* structure) {
-	std::map<TokenType, Object> params;
+Object* Evaluator::evalStructureStatement(StructureStatementNode* structureNode) {
+	std::map<TokenType, Object*> params;
 
-	for (PropertyNode* prop : structure->properties) {
+	for (PropertyNode* prop : structureNode->properties) {
 		TokenType propName = prop->name;
-		Object* propValue = evalExpression(prop->value);
+		Object* propValue = eval(prop->value);
 
-		params.insert({ propName, propValue });
+		params[propName] = propValue;
 	}
 
-	if (structure->structureType == ROOM) {
+
+	// test any
+	if (structureNode->structureType == ROOM) {
 		Room* structure = new Room(params);
-		// add to enviroment
+
+		env->set(structureNode->structureType, structure);
+		return structure;
 	}
 	else if (structureNode->structureType == WALL) {
-		Wall* wall = new Wall(params);
-	}
-
-}
-
-std::pair<TokenType, Object> evalProperty(PropertyNode* propertyNode) {
-
-}
-
-Object* Evaluator::evalPrefixExpression(PrefixExpressionNode* node) {
-	Object* left = eval(node->right);
-
-	if (left->getType() == INTEGER_OBJ) {
-		Integer* intObject = dynamic_cast<Integer*>(left);
-		return new Integer(intObject->value);
-	}
-
-	if (left->getType() == FLOAT_OBJ) {
-		Float* floatObject = dynamic_cast<Float*>(left);
-		return new Float(floatObject->value);
-	}
-
-	std::cout << "Invalid eval prefix expression";
-	return NULL;
-}
-
-// template method???
-Object* Evaluator::evalInfixExpression(InfixExpressionNode* node) {
-	Object* left = eval(node->left);
-	Object* right = eval(node->right);
-
-	if (left->getType() == MEASURE_OBJ && right->getType() == MEASURE_OBJ) {
-		return evalMeasureInfixExpression(node);
-	} else if (left->getType() == INTEGER_OBJ && right->getType() == INTEGER_OBJ) {
-		return evalIntegerInfixExpression(node);
-	} else {
-		std::cout << "Eval infix expression, invalid type";
+		/*Wall* wall = new Wall(params);
+		return wall;*/
 	}
 
 };
 
-Object* Evaluator::evalIntegerInfixExpression(InfixExpressionNode* node) {
-		Integer* left = dynamic_cast<Integer*>(eval(node->left));
-		Integer* right = dynamic_cast<Integer*>(eval(node->right));
+std::pair<TokenType, Object*> Evaluator::evalPropertyNode(PropertyNode* propertyNode) {
 
-		if (node->op == PLUS) {
-			return *left + *right;
+	return { propertyNode->name, eval(propertyNode->value) };
+}
 
-		}
-		else if (node->op == MINUS) {
-			return *left - *right;
-		
-		} 
-		else if (node->op == ASTERISK) {
-			return *left * *right;
-		}
+Object* Evaluator::evalPrefixExpression(TokenType op, Object* right) {
+	if (op == MINUS) {
+		return evalMinusPrefixOperatorExpression(right);
+	}
+	else {
+		//error
+	}
+}
+
+Object* Evaluator::evalMinusPrefixOperatorExpression(Object* right) {
+	if (right->getType() == INTEGER_OBJ) {
+		int value = dynamic_cast<Integer*>(right)->value;
+		return new Integer(-value);
+	}
+
+	if (right->getType() == FLOAT_OBJ) {
+		float value = dynamic_cast<FloatObject*>(right)->value;
+		return new FloatObject(-value);
+	}
+
+	return nullptr;
+}
+
+
+Object* Evaluator::evalInfixExpression(TokenType op, Object* left, Object* right) {
+	Object* leftNew;
+	Object* rightNew;
+
+	// if one float or measure -> convert int to float
+	bool flag = (left->getType() == FLOAT_OBJ || left->getType() == MEASURE
+		|| right->getType() == FLOAT_OBJ || right->getType() == MEASURE);
+
+	if (flag) {
+		if (left->getType() == INTEGER_OBJ) left = FloatObject::intToFloat(dynamic_cast<Integer*>(left));
+		if (right->getType() == INTEGER_OBJ) right = FloatObject::intToFloat(dynamic_cast<Integer*>(right));
+	}
+
+
+	if (left->getType() == INTEGER_OBJ && right->getType() == INTEGER_OBJ) {
+		Integer* leftInt = dynamic_cast<Integer*>(left);
+		Integer* rightInt = dynamic_cast<Integer*>(right);
+
+		return evalIntegerInfixExpression(op, leftInt, rightInt);
+	}
+	else if (left->getType() == FLOAT_OBJ && right->getType() == FLOAT_OBJ) {
+		FloatObject* leftFloat = dynamic_cast<FloatObject*>(left);
+		FloatObject* rightFloat = dynamic_cast<FloatObject*>(right);
+
+		return evalFloatInfixExpression(op, leftFloat, rightFloat);
+	}
+	else if (left->getType() == MEASURE_OBJ && right->getType() == MEASURE_OBJ) {
+		Measure* leftMeasure = dynamic_cast<Measure*>(left);
+		Measure* rightMeasure = dynamic_cast<Measure*>(right);
+
+		return evalMeasureInfixExpression(op, leftMeasure, rightMeasure);
+	}
+	else if (left->getType() == STRING_OBJ && right->getType() == STRING_OBJ) {
+		String* leftString = dynamic_cast<String*>(left);
+		String* rightString = dynamic_cast<String*>(right);
+
+		return evalStringInfixExpression(op, leftString, rightString);
+	}
 };
 
-Object* Evaluator::evalMeasureInfixExpression(InfixExpressionNode* node) {
-	Measure* left = dynamic_cast<Measure*>(eval(node->left));
-	Measure* right = dynamic_cast<Measure*>(eval(node->right));
-
-	if (node->op == PLUS) {
+Object* Evaluator::evalIntegerInfixExpression(TokenType op, Integer* left, Integer* right) {
+	if (op == PLUS) {
 		return *left + *right;
+
 	}
-	else if (node->op == MINUS) {
+	else if (op == MINUS) {
 		return *left - *right;
+
 	}
+	else if (op == ASTERISK) {
+		return *left * *right;
+	}
+	else if (op == SLASH) { // TODO: division by zero exception
+		return new FloatObject(1.0 * left->value / right->value);
+	}
+	else return nullptr;
+};
+
+Object* Evaluator::evalFloatInfixExpression(TokenType op, FloatObject* left, FloatObject* right) {
+	if (op == PLUS) {
+		return new FloatObject(left->value + right->value);
+	}
+	else if (op == MINUS) {
+		return new FloatObject(left->value - right->value);
+	}
+	else if (op == ASTERISK) {
+		return new FloatObject(left->value * right->value);
+	}
+	else if (op == SLASH) { // TODO: division by zero exception
+		return new FloatObject(left->value / right->value);
+	}
+	else return nullptr;
+}
+
+Object* Evaluator::evalStringInfixExpression(TokenType op, String* left, String* right) {
+	if (op == PLUS) {
+		return new String(left->value + right->value);
+	}
+	else return nullptr;
+}
+
+Object* Evaluator::evalMeasureInfixExpression(TokenType op, Measure* left, Measure* right) {
+	if (op == PLUS) {
+		return new Measure(left->value + right->value);
+	}
+	else if (op == MINUS) {
+		return new Measure(left->value - right->value);
+	}
+	else return nullptr;
 }
 
 Object* Evaluator::evalIdentifier(IdentifierNode* node) {
@@ -176,8 +282,17 @@ Object* Evaluator::evalIntLiteral(IntegerLiteralNode* node) {
 }
 
 Object* Evaluator::evalFloatLiteral(FloatLiteralNode* node) {
-	return new Float(node->value);
+	return new FloatObject(node->value);
 }
+
+Object* Evaluator::evalStringLiteral(StringLiteralNode* node) {
+	return new String(node->value);
+}
+
+Object* Evaluator::evalColorLiteral(ColorLiteralNode* node) {
+	return new Color(node->value);
+}
+
 
 Object* Evaluator::evalMeasureLiteral(MeasureLiteralNode* node) {
 	Object* valueObj = eval(node->valueExpr);
@@ -187,7 +302,7 @@ Object* Evaluator::evalMeasureLiteral(MeasureLiteralNode* node) {
 		value = intObj->value;
 	}
 	
-	if (auto floatObj = dynamic_cast<Float*>(valueObj)) {
+	if (auto floatObj = dynamic_cast<FloatObject*>(valueObj)) {
 		value = floatObj->value;
 	}
 
@@ -198,114 +313,23 @@ Object* Evaluator::evalMeasureLiteral(MeasureLiteralNode* node) {
 	return new Measure(value, node->unit);
 }
 
+Object* Evaluator::evalIndexExpression(IndexExpressionNode* node) {
+	auto arr = eval(node->left);
+	auto index = eval(node->index);
 
-Object* Evaluator::eval(Node* node) {
-	if (node->getType() == AstNodeType::IntLiteral) {
-		IntegerLiteralNode& intNode = dynamic_cast<IntegerLiteralNode&>(*node);
+	auto arrObject = dynamic_cast<Array*>(arr);
+	auto indexInt = dynamic_cast<Integer*>(arr);
 
-		return intNode.value;
-	} 
-
-	switch (node->getType())
-	{
-	case AstNodeType::InfixExpression:
-		InfixExpressionNode& infixNode = dynamic_cast<IntegerLiteralNode&>(*node);
-
-		auto left = eval(infixNode.left);
-		auto right = eval(infixNode.right);
-		
-		return evalInfixExpression(infixNode.opToken, left, right);
-	case AstNodeType::IntLiteral:
-		IntegerLiteralNode& intNode = dynamic_cast<IntegerLiteralNode&>(*node);
-
-		return new Integer(intNode.value);
-	break;
-	case AstNodeType::FloatLiteral:
-		FloatLiteralNode& floatNode = dynamic_cast<FloatLiteralNode&>(*node);
-
-		return new Float(floatNode.value);
-	case AstNodeType::StringLiteral:
-		break;
-	case AstNodeType::MeasureLiteral:
-		MeasureLiteralNode& measureNode = dynamic_cast<MeasureLiteralNode&>(*node);
-		Object* value = eval(measureNode.valueExpr);
-
-		return new Measure(measureNode.valueExpr, measureNode.unit);
-	case AstNodeType::ColorLiteral:
-		break;
-
-	case AstNodeType::Structure:
-		StructureStatementNode& structureNode = dynamic_cast<StructureStatementNode&>(*node);
-		std::map<TokenType, Object> params;
-
-		for (PropertyNode* prop : structureNode.properties) {
-			prop->name;
-			prop->value;
-		}
-
-		if (structureNode.structureType == ROOM) {
-			Room* structure = new Room(params);
-			// add to enviroment
-		}
-		else if (structureNode.structureType == WALL) {
-			Wall* wall = new Wall(params);
-		}
-
-		/*	else if (structureNode.structureType == DOOR) {
-			Door* door = new Door(params);
-			
-		}
-		else if (structureNode.structureType == ELEVATOR) {
-			Elevator* elevator = new Elevator(params);
-		}
-		else if (structureNode.structureType == BED) {
-		
-		}
-		else if (structureNode.structureType == TABLE) {
-		
-		}
-		else if (structureNode.structureType == CHAIR) {
-		
-		}
-		else {
-		
-		}*/
-
-
-		// iterate over properties 
-		// get structure type
-		break;
-	default:
-		break;
-	}
-
-
-	
+	return arrObject->elements.at(indexInt->value);
 }
 
-Object* Evaluator::evalInfixExpression(Object* left, Object* right, TokenType op) {
-	if (left->getType() == STRING_OBJ && right->getType() == STRING_OBJ) {
-		return evalStringInfixExpression(left, right, op);
-	}
-	else if (left->getType() == MEASURE_OBJ && left->getType() == MEASURE_OBJ) {
-		return evalMeasureInfixExpression(left, right, op);
-	}
-	else if (left->getType() == INTEGER_OBJ && right->getType() == INTEGER_OBJ) {
-		return evalIntegerInfixExpression(left, right, op);
-	}
-	else if (left->getType() == FLOAT_OBJ && right->getType() == FLOAT_OBJ) {
-		return evalFloatInfixExpressino(left, right, op);
-	}
-};
 
-Object* Evaluator::evalMeasureInfixExpression(Object* left, Object* right, TokenType op) {
-		
-};
+Object* Evaluator::evalArrayLiteral(ArrayLiteralNode* node) {
+	Array* arrayObj = new Array();
 
-Object* Evaluator::evalStringInfixExpression(Object* left, Object* right, TokenType op) {
-	
-}
+	for (auto elem : node->elements) {
+		arrayObj->elements.push_back(eval(elem));
+	}
 
-Object* Evaluator::evalFloatInfixExpression(Object* left, Object* right, TokenType op) {
-	if (op == "+") return new Integer()
+	return arrayObj;
 }

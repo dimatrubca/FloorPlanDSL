@@ -5,11 +5,13 @@ std::unordered_map<std::string, TokenType> keywords({
 	{"string", STRING},
 	{"measure", MEASURE},
 	{"color", COLOR},
-	{"room", ROOM},
-	{"window", WINDOW},
-	{"wall", WALL},
-	{"door", DOOR},
-	{"elevator", ELEVATOR},
+	{"float", FLOAT},
+	{"list", LIST},
+	{"Room", ROOM},
+	{"Window", WINDOW},
+	{"Wall", WALL},
+	{"Door", DOOR},
+	{"Elevator", ELEVATOR},
 	{"stairs", STAIRS},
 	{"bed", BED},
 	{"TABLE", TABLE},
@@ -40,7 +42,7 @@ std::unordered_map<std::string, TokenType> keywords({
 });
 
 std::set<TokenType> dataTypes({
-	INT, STRING, MEASURE, COLOR
+	INT, STRING, MEASURE, COLOR, FLOAT, LIST
 });
 
 std::set<TokenType> structures({
@@ -51,6 +53,9 @@ std::set<TokenType> roomProps({
 	ID_PROP, SIZE_PROP, ANGLES_PROP, BORDER_PROP, POSITION_PROP, STARTONWAL_PROP, LAYER_PROP
 });	
 
+std::set<TokenType> measureUnits({
+	MEASURE_UNIT_MM, MEASURE_UNIT_CM, MEASURE_UNIT_DM, MEASURE_UNIT_M, MEASURE_UNIT_KM
+});
 
 
 std::set<TokenType> wallProps({

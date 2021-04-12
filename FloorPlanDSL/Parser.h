@@ -6,6 +6,7 @@
 #include "AST.h"
 #include "Lexer.h"
 #include "Utils.h"
+#include "ParserError.h"
 
 enum class Precendence {
 	LOWEST,
@@ -13,7 +14,8 @@ enum class Precendence {
 	SUM,
 	PRODUCT,
 	PREFIX,
-	INDEX
+	INDEX,
+	CALL
 };
 
 class Parser {
@@ -22,6 +24,7 @@ public:
 
 	void advance();
 	ProgramNode* parseProgram();
+	std::vector<ParserError*> getErrors();
 private:
 	Lexer lexer;
 	Token currToken;
@@ -29,12 +32,16 @@ private:
 	std::map < TokenType, std::function<ExpressionNode* (Parser& const)>> prefixFuncs;
 	std::map < TokenType, std::function<ExpressionNode* (Parser& const, ExpressionNode*)>> infixFuncs;
 	std::map <TokenType, Precendence> precendences;
+	std::vector<ParserError*> errors;
+
+
 
 	StatementNode* parseDeclarationStatement();
 	AssignmentStatementNode* parseAssignmentStatement();
 	StructureStatementNode* parseStructureDeclaration();
+	ExpressionStatementNode* parseExpressionStatement();
 	PropertyNode* parsePropertyNode();
-	ExpressionNode* parseExpression(Precendence precendence);
+	ExpressionNode* parseExpression(Precendence precendence, bool);
 
 	ExpressionNode* parseIdentifier();
 	ExpressionNode* parseIntegerLiteral();
@@ -46,10 +53,13 @@ private:
 	ExpressionNode* parseArrayLiteral();
 	ExpressionNode* parseGroupedExpression();
 	ExpressionNode* parseInfixExpression(ExpressionNode* left);
+	ExpressionNode* parseCallExpression(ExpressionNode* left);
 	ExpressionNode* parseIndexExpression(ExpressionNode* left);
+	std::vector<ExpressionNode*> parseExpressionList(TokenType end);
 
 	Precendence currentPrecendence();
 	Precendence peekPrecendence();
 	void error(Token token, std::string c);
-	void requirePeek(TokenType token);
+	bool expectPeek(TokenType token);
+	void requirePeekPropertyOf(TokenType structureType);
 };

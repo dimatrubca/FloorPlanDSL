@@ -1,4 +1,7 @@
 #pragma once
+#ifndef _UTILS_
+#define _UTILS_
+
 #include "Token.h"
 #include <map>
 
@@ -19,10 +22,18 @@ static bool isDataType(Token token) {
 }
 
 static bool isStructureName(Token token) {
-     return structures.find(token.type) != structures.end();
+     bool u=structures.find(token.type) != structures.end();
+     return u;
+}
+
+static bool isMeasureUnit(Token token) {
+     return measureUnits.find(token.type) != measureUnits.end();
 }
 
 template<typename K, typename V>
 static bool hasKey(std::map<K, V> dict, K value) {
      return dict.find(value) != dict.end();
 }
+
+
+#endif
