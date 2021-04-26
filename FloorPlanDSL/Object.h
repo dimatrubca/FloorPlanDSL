@@ -115,9 +115,11 @@ struct Border {
 };
 
 struct Position {
-	Position(Measure* x, Measure* y) : x(x), y(y) {};
-	Measure* x;
-	Measure* y;
+	Position() {};
+	Position(Measure* x, Measure* y);
+	Position(float x, float y) : x(x), y(y) {};
+	float x;
+	float y;
 
 	std::string toString() { return "{" + x->toString() + ", " + y->toString() + "}"; };
 };
@@ -139,11 +141,15 @@ class Wall : public Object {
 public:
 	Wall(std::map<TokenType, Object*> params);
 	std::string toString() {return "Wall"; };
+	std::vector<float> vertices;
 
 	// properties
 	Position start;
 	Position end;
 	Border border;
+	float angle;
+
+	void setVertices();
 };
 
 class Window : public Object {

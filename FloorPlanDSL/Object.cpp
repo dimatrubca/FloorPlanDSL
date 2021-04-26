@@ -21,11 +21,11 @@ Measure::Measure(float value, TokenType unitType) : Object(MEASURE_OBJ) {
 Room::Room(std::map<TokenType, Object*> params) : Object(ROOM_OBJ) {
 	if (hasKey(params, SIZE_PROP)) {
 		Array* sizeArray = dynamic_cast<Array*>(params[SIZE_PROP]);
-		//MyError::Assert(sizeArray != nullptr, "Invalid sizeArray property value");
+		Error::Assert(sizeArray != nullptr, "Invalid sizeArray property value");
 
 		for (auto elem : sizeArray->elements) {
 			Measure* length = dynamic_cast<Measure*>(elem);
-			//MyError::Assert(length != nullptr, "Invalid length in sizeArray");
+			Error::Assert(length != nullptr, "Invalid length in sizeArray");
 
 			size.push_back(length);
 		}
@@ -33,16 +33,16 @@ Room::Room(std::map<TokenType, Object*> params) : Object(ROOM_OBJ) {
 
 	if (hasKey(params, ANGLES_PROP)) {
 		Array* anglesArray = dynamic_cast<Array*>(params[ANGLES_PROP]);
-		//MyError::Assert(anglesArray != nullptr, "Invalid angleArray property value");
+		Error::Assert(anglesArray != nullptr, "Invalid angleArray property value");
 
 		for (auto elem : anglesArray->elements) {
 			FloatObject* angle = dynamic_cast<FloatObject*>(elem);
-			//MyError::Assert(angle != nullptr, "Invalid angle type in angleArray");
+			Error::Assert(angle != nullptr, "Invalid angle type in angleArray");
 
 			angles.push_back(angle);
 		}
 
-		//MyError::Assert(angles.size() == size.size(), "Length of sizeArray and anglesArray must be equal");
+		Error::Assert(angles.size() == size.size(), "Length of sizeArray and anglesArray must be equal");
 	}
 	/*else {
 		for (int i = 0; i < size.size(); i++) angles.push_back(new FloatObject(""));
@@ -53,9 +53,9 @@ Room::Room(std::map<TokenType, Object*> params) : Object(ROOM_OBJ) {
 		Measure* width = dynamic_cast<Measure*>(borderArray->elements[0]);
 		Color* color = dynamic_cast<Color*>(borderArray->elements[1]);
 
-		//MyError::Assert(borderArray != nullptr, "Invalid borderArray"); // ? remove
-		//MyError::Assert(width != nullptr, "First element inside borderArray must be of type 'measure'");
-		//MyError::Assert(color != nullptr, "Second element inside borderArray must be of type 'color'");
+		Error::Assert(borderArray != nullptr, "Invalid borderArray"); // ? remove
+		Error::Assert(width != nullptr, "First element inside borderArray must be of type 'measure'");
+		Error::Assert(color != nullptr, "Second element inside borderArray must be of type 'color'");
 
 		border = new Border(width, color);
 	}
@@ -107,4 +107,34 @@ std::string Room::toString() {
 	ss << "position: " << position->toString() << '\n';
 
 	return ss.str();
+}
+
+Position::Position(Measure* x, Measure* y) {
+	this->x = x->value;
+	this->y = y->value;
+}
+
+void Wall::setVertices() {
+	Position start2, end2;
+	float width = this->border.width->value;
+
+	start2.x = start.x - width * sin(angle);
+	start2.y = start.y + width * cos(angle);
+
+	end2.x = end.x - width * sin(angle);
+	end2.y = end.y + width * cos(angle);
+
+	vertices.push_back(start.x);
+	vertices.push_back(start.y);
+	vertices.push_back(start2.x);
+	vertices.push_back(start2.y);
+	vertices.push_back(end2.x);
+	vertices.push_back(end2.y);
+
+	vertices.push_back(start.x);
+	vertices.push_back(start.y);
+	vertices.push_back(end2.x);
+	vertices.push_back(end2.y);
+	vertices.push_back(end.x);
+	vertices.push_back(end.y);
 }
