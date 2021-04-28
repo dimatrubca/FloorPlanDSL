@@ -1,6 +1,16 @@
+
 Wall(
-	id: wall1,
-	start: {250mm, 50mm},
-	end: {350mm, 200mm},
-	border: {25mm,#000000},
+	id: "abd",
+	start: {150mm, 50mm},
+	end: {150mm, 200mm},
+	border: {15mm, black},
+);
+
+float initialAngle = 90.0;
+
+Room( 
+	id: "room1", size: {150mm, 150mm, 150mm, 150mm, 220mm},
+	angles: {initialAngle, 110.0,140.0, 110.0, 90.0},
+	border:{15mm, #0000FF},
+	position: {450mm, 250mm}
 );

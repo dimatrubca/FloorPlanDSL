@@ -7,6 +7,7 @@
 #include <fstream>
 #include <string>
 
+
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
@@ -19,6 +20,8 @@
 #include "Evaluator.h"
 #include "Lexer.h"
 #include "Parser.h"
+
+
 GLenum glCheckError_(const char* file, int line)
 {
      GLenum errorCode;
@@ -82,12 +85,20 @@ void REPL() {
           std::cout << '\n';
      }
 
-     Object* wallOb = evaluator.env->get("wall1");
+     Object* wallOb = evaluator.env->get("abd");
+     Object* roomOb = evaluator.env->get("room1");
      if (Wall* wall = dynamic_cast<Wall*>(wallOb)) {
           floorPlan.drawableObjects.push_back(wall);
      }
      else {
-          std::cout << "Error: no wall with id wall1";
+          std::cout << "Error: no wall with id abd";
+     }
+
+     if (Room* room = dynamic_cast<Room*>(roomOb)) {
+          floorPlan.drawableObjects.push_back(room);
+     }
+     else {
+          std::cout << "Error: no room with id room1";
      }
 }
 
@@ -100,7 +111,7 @@ int main() {
      glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
      // create window
-     GLFWwindow* window = glfwCreateWindow(600, 600, "Learn OpenGL", NULL, NULL);
+     GLFWwindow* window = glfwCreateWindow(800, 600, "Floor Plan", NULL, NULL);
      if (window == NULL) {
           std::cout << "Failed to create GLFW window" << std::endl;
           glfwTerminate();
@@ -154,7 +165,7 @@ int main() {
 
           // render
           // ------
-          glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
+          glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
           glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
           floorPlan.render();
 

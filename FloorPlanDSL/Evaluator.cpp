@@ -141,15 +141,15 @@ Object* Evaluator::evalStructureStatement(StructureStatementNode* structureNode)
 
 	// test any
 	if (structureNode->structureType == ROOM) {
-		Room* structure = new Room(params);
+		Room* room = new Room(params);
 
-		env->set(structureNode->structureType, structure);
-		return structure;
+		env->set(room->id, room);
+		return room;
 	}
 	else if (structureNode->structureType == WALL) {
 		Wall* wall = new Wall(params);
 
-		env->set("wall1", wall);
+		env->set(wall->id, wall);
 		return wall;
 	}
 
@@ -188,7 +188,7 @@ Object* Evaluator::evalInfixExpression(TokenType op, Object* left, Object* right
 	Object* leftNew;
 	Object* rightNew;
 
-	// if one float or measure -> convert int to float
+	// if one float or measure type -> convert int to float
 	bool flag = (left->getType() == FLOAT_OBJ || left->getType() == MEASURE
 		|| right->getType() == FLOAT_OBJ || right->getType() == MEASURE);
 

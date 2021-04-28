@@ -6,7 +6,7 @@
 
 #include "Utils.h"
 #include <GL/glew.h>
-
+#define hexToInt(ch) (ch >= 'A' ? ch - 'A' + 10 : ch - '0')
 class Renderer;
 
 typedef std::string ObjectType;
@@ -22,6 +22,8 @@ const ObjectType WALL_OBJ = "WALL";
 const ObjectType DOOR_OBJ = "DOOR";
 const ObjectType NULL_OBJ = "NULL";
 const ObjectType ERROR_OBJ = "ERROR_OBJ";
+
+
 
 class Object {
 public:
@@ -93,10 +95,15 @@ public:
 
 class Color : public Object {
 public:
-	Color(std::string code) : Object(COLOR_OBJ), hexCode(code) {};
+	Color(std::string code) : Object(COLOR_OBJ), hexCode(code) {
+		rgb[0] = (hexToInt(code[1]) * 16 + (hexToInt(code[2])));
+		rgb[1] = (hexToInt(code[3]) * 16 + (hexToInt(code[4])));
+		rgb[2] = (hexToInt(code[5]) * 16 + (hexToInt(code[6])));
+	};
 	std::string toString() { return hexCode; };
 
 	std::string hexCode;
+	int rgb[3];
 };
 
 
@@ -132,45 +139,66 @@ struct Position {
 // abstract class
 class DrawableObject : public Object {
 public:
+	std::string id;
 	std::vector<float> vertices;
-	DrawableObject(ObjectType type);
+	std::vector<float> colors;
+	DrawableObject(ObjectType type, std::map<TokenType, Object*> params);
 
 	void draw(Renderer& renderer);
 
 	void init() {
 		glGenVertexArrays(1, &this->VAO);
-		glGenBuffers(1, &this->VBO);
+		glGenBuffers(2, &this->VBO[0]);
 
 		glBindVertexArray(this->VAO);
-		glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
+
+		// position buffer
+		glBindBuffer(GL_ARRAY_BUFFER, this->VBO[0]);
 		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
+		
 		std::cout << vertices.size() * sizeof(float) << "... " << '\n';
 		std::cout << sizeof(vertices) << '\n';	
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
 
-		//glBindBuffer(GL_ARRAY_BUFFER, 0);
+		// color buffer
+		glBindBuffer(GL_ARRAY_BUFFER, this->VBO[1]);
+		glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(float), &colors[0], GL_STATIC_DRAW);
+
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(1);
+
+		// unbind VAO
 		glBindVertexArray(0);
 	}
+
+protected:
+	static Position getNextPos(Position pos, float length, float alpha);
+	static Position getAdjacentPos(Position pos, float width, float alpha);
+	static void addBufferVertices(Position pos1, Position pos2, Position pos3, std::vector<float> &vertices);
+	static void addBufferColors(int rgb[3], int count, std::vector<float>& colors);
 private:
 	unsigned int VAO;
-	unsigned int VBO;
+	unsigned int VBO[2];
 };
 
 
 
 
-class Room : public Object {
+class Room : public DrawableObject {
 public:
 	Room(std::map<TokenType, Object*> params);
 	std::string toString();
 
 	// properties
-	std::string id;
-	std::vector<Measure*> size;
-	std::vector<FloatObject*> angles;
+	std::vector<float> sizes;
+	std::vector<float> angles;
+	Position startPosition;
+	//std::vector<Measure*> size;
+	//std::vector<FloatObject*> angles;
 	Border* border;
-	Position* position;
+
+	void setVertices();
 };
 
 class Wall : public DrawableObject {

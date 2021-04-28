@@ -2,6 +2,49 @@
 #include "Error.h"
 #include "Renderer.h"
 #include <math.h>
+#define _USE_MATH_DEFINES
+
+#include <cmath>
+#include <corecrt_math_defines.h>
+
+Position DrawableObject::getNextPos(Position pos, float length, float alpha) {
+	Position nextPos;
+
+	nextPos.x = pos.x + cos(alpha) * length;
+	nextPos.y = pos.y + sin(alpha) * length;
+
+	return nextPos;
+}
+
+Position DrawableObject::getAdjacentPos(Position pos, float width, float alpha) {
+	Position adjacentPos;
+
+	float beta = M_PI / 2 - alpha;
+
+	adjacentPos.x = pos.x - cos(beta) * width;
+	adjacentPos.y = pos.y + sin(beta) * width;
+
+	return adjacentPos;
+}
+
+void DrawableObject::addBufferVertices(Position pos1, Position pos2, Position pos3, std::vector<float> &vertices) {
+	vertices.push_back(pos1.x);
+	vertices.push_back(pos1.y);
+	vertices.push_back(0);
+
+	vertices.push_back(pos2.x);
+	vertices.push_back(pos2.y);
+	vertices.push_back(0);
+
+	vertices.push_back(pos3.x);
+	vertices.push_back(pos3.y);
+	vertices.push_back(0);
+}
+
+
+void DrawableObject::addBufferColors(int rgb[3], int count, std::vector<float> &colors) {
+	for (int i = 0; i < count; i++) colors.insert(colors.end(), rgb, rgb + 3);
+};
 
 Measure::Measure(float value, TokenType unitType) : Object(MEASURE_OBJ) {
 	float convertFactor = 1;
@@ -20,7 +63,8 @@ Measure::Measure(float value, TokenType unitType) : Object(MEASURE_OBJ) {
 }
 
 
-Room::Room(std::map<TokenType, Object*> params) : Object(ROOM_OBJ) {
+Room::Room(std::map<TokenType, Object*> params) : DrawableObject(ROOM_OBJ, params) {
+
 	if (hasKey(params, SIZE_PROP)) {
 		Array* sizeArray = dynamic_cast<Array*>(params[SIZE_PROP]);
 		Error::Assert(sizeArray != nullptr, "Invalid sizeArray property value");
@@ -29,7 +73,7 @@ Room::Room(std::map<TokenType, Object*> params) : Object(ROOM_OBJ) {
 			Measure* length = dynamic_cast<Measure*>(elem);
 			Error::Assert(length != nullptr, "Invalid length in sizeArray");
 
-			size.push_back(length);
+			sizes.push_back(length->value);
 		}
 	}
 
@@ -41,10 +85,10 @@ Room::Room(std::map<TokenType, Object*> params) : Object(ROOM_OBJ) {
 			FloatObject* angle = dynamic_cast<FloatObject*>(elem);
 			Error::Assert(angle != nullptr, "Invalid angle type in angleArray");
 
-			angles.push_back(angle);
+			angles.push_back(angle->value);
 		}
 
-		Error::Assert(angles.size() == size.size(), "Length of sizeArray and anglesArray must be equal");
+		Error::Assert(angles.size() == sizes.size(), "Length of sizeArray and anglesArray must be equal");
 	}
 	/*else {
 		for (int i = 0; i < size.size(); i++) angles.push_back(new FloatObject(""));
@@ -71,9 +115,10 @@ Room::Room(std::map<TokenType, Object*> params) : Object(ROOM_OBJ) {
 		//MyError::Assert(x != nullptr, "First element inside positionsArray must be of type 'measure'");
 		//MyError::Assert(y != nullptr, "Second element inside positionsArray must be of type 'measure'");
 
-		position = new Position(x, y);
+		startPosition = Position(x, y);
 	}
 
+	setVertices();
 };
 
 
@@ -85,10 +130,10 @@ std::string Room::toString() {
 	ss << "size = {";
 
 	bool first = true;
-	for (auto length : size) {
+	for (auto length : sizes) {
 		if (!first) ss << ", ";
 
-		ss << length->toString();
+		ss << length;
 		first = false;
 	}
 
@@ -100,13 +145,13 @@ std::string Room::toString() {
 	for (auto angle : angles) {
 		if (!first) ss << ", ";
 
-		ss << angle->toString();
+		ss << angle;
 		first = false;
 	}
 	ss << "}, \n";
 
 	ss << "border: " << border->toString() << '\n';
-	ss << "position: " << position->toString() << '\n';
+	ss << "position: " << startPosition.toString() << '\n';
 
 	return ss.str();
 }
@@ -129,35 +174,6 @@ void Wall::setVertices() {
 
 	end2.x = end.x - width * sin(angle);
 	end2.y = end.y + width * cos(angle);
-
-	/*vertices.push_back(0);
-	vertices.push_back(0);
-	vertices.push_back(0);
-
-
-	vertices.push_back(0.5);
-	vertices.push_back(0.5);
-	vertices.push_back(0);
-
-
-	vertices.push_back(1);
-	vertices.push_back(0);
-	vertices.push_back(0);
-
-	vertices.push_back(0);
-	vertices.push_back(0);
-	vertices.push_back(0);
-
-
-	vertices.push_back(0.5);
-	vertices.push_back(0.5);
-	vertices.push_back(0);
-
-
-	vertices.push_back(1);
-	vertices.push_back(0);
-	vertices.push_back(0);*/
-
 
 	vertices.push_back(start.x);
 	vertices.push_back(start.y);
@@ -183,13 +199,46 @@ void Wall::setVertices() {
 	vertices.push_back(end.y);
 	vertices.push_back(0);
 
+	for (int i = 0; i < 6; i++) colors.insert(colors.end(), this->border.color->rgb, this->border.color->rgb + 3);
 }
 
-DrawableObject::DrawableObject(ObjectType type) : Object(type) {
+void Room::setVertices() {
+	Position currPos = startPosition;
+	float prevAngle = 0;
 
+	float width = this->border->width->value;
+
+	std::cout << M_PI;
+
+	for (int i = 0; i < sizes.size(); i++) {
+		float angle = angles[i]/180*M_PI + prevAngle - M_PI * (i != 0); // ???
+
+		Position nextPos = getNextPos(currPos, sizes[i], angle);
+		Position currAdjacent = getAdjacentPos(currPos, width, angle);
+		Position nextAdjacent = getAdjacentPos(nextPos, width, angle);
+
+		addBufferVertices(currPos, nextPos, currAdjacent, vertices);
+		addBufferVertices(nextPos, currAdjacent, nextAdjacent, vertices);
+
+		currPos = nextPos;
+		prevAngle = angle;
+	}
+
+	addBufferColors(border->color->rgb, sizes.size() * 6, this->colors); // double check
+	init();
+}
+
+DrawableObject::DrawableObject(TokenType token, std::map<TokenType, Object*> params) : Object(token) {
+	if (hasKey(params, ID_PROP)) {
+		String* idOb = dynamic_cast<String*>(params[ID_PROP]);
+		this->id = idOb->value;
+	}
 };
 
-Wall::Wall(std::map<TokenType, Object*> params) : DrawableObject(WALL_OBJ) {
+
+
+
+Wall::Wall(std::map<TokenType, Object*> params) : DrawableObject(WALL_OBJ, params) {
 	if (hasKey(params, START_PROPERTY)) {
 		Array* positionsArray = dynamic_cast<Array*>(params[START_PROPERTY]);
 		Measure* x = dynamic_cast<Measure*>(positionsArray->elements[0]);

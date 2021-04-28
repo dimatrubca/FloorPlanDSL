@@ -2,8 +2,12 @@
 #ifndef _UTILS_
 #define _UTILS_
 
+#include <cmath>
+#include <corecrt_math_defines.h>
+
 #include "Token.h"
 #include <map>
+#include "Object.h"
 
 static bool isLetter(char ch) {
      return ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z' || ch == '_';
@@ -32,8 +36,8 @@ static bool isMeasureUnit(Token token) {
 
 template<typename K, typename V>
 static bool hasKey(std::map<K, V> dict, K value) {
-     return dict.find(value) != dict.end();
-}
+	return dict.find(value) != dict.end();
+};
 
 
 #endif

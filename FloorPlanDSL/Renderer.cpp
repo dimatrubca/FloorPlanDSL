@@ -7,13 +7,6 @@ Renderer::Renderer(Shader& shader) {
 	this->initRenderData();
 	this->shader.use();
 	glCheckError0();
-
-	//glBindVertexArray(VAO);
-
-	// layout (location = 0) in vec3 position
-	/*glEnableVertexAttribArray(0);
-	glVertexAttribFormat(0, 3, GL_FLOAT, false, 0); ///3!!!
-	glVertexAttribBinding(0, 0);*/
 }
 
 void Renderer::drawWall(Wall wall) {

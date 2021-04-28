@@ -95,8 +95,8 @@ union RecordType
      int i;
      float f;
 };
-/*
-int main() {
+
+int main2() {
      ConsoleREPL();
      RecordType t;
      t.i = 5;
@@ -106,5 +106,5 @@ int main() {
      b = 3;
 
      return 0;
-}*/
+}
 

@@ -60,4 +60,5 @@ void Shader::compile(const char* vertexSrc, const char* fragmentSrc) {
 	}
 
 	std::cout << vertexSrc << "\n\n" << fragmentSrc << "\n\n";
+	use();
 }
