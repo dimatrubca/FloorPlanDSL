@@ -5,13 +5,14 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include "GlUtils.h"
 
 class Shader {
 public:
 	unsigned int ID;
 	Shader() {};
 	// user/activate the shader
-	void use();
+	void use() const;
 	void compile(const char* vertexSrc, const char* fragmentSrc);
 	// utility uniform functions
 	void setInt(const std::string& name, int value) const;

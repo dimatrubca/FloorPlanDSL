@@ -147,8 +147,10 @@ Object* Evaluator::evalStructureStatement(StructureStatementNode* structureNode)
 		return structure;
 	}
 	else if (structureNode->structureType == WALL) {
-		/*Wall* wall = new Wall(params);
-		return wall;*/
+		Wall* wall = new Wall(params);
+
+		env->set("wall1", wall);
+		return wall;
 	}
 
 };

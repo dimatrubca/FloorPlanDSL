@@ -60,10 +60,16 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceManager.cpp">
+    <ClCompile Include="FloorPlan.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FloorPlan.cpp">
+    <ClCompile Include="MyResourceManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mainRender.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GlUtils.h">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -101,14 +107,18 @@
     <ClInclude Include="Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceManager.h">
+    <ClInclude Include="FloorPlan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FloorPlan.h">
+    <ClInclude Include="MyResourceManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="res\sample.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shaders\fragment.shader" />
+    <None Include="res\shaders\vertex.shader" />
   </ItemGroup>
 </Project>

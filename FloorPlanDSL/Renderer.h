@@ -4,6 +4,7 @@
 #include "Object.h"
 #include "Shader.h"
 #include "Object.h"
+#include "GlUtils.h"
 
 class Renderer
 {
@@ -12,6 +13,7 @@ public:
      ~Renderer();
 
      void drawWall(Wall wall);
+     void draw(GLuint VAO, int count);
 
 private:
      Shader shader;

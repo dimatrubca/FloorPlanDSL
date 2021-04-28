@@ -27,14 +27,16 @@
     <ClCompile Include="FloorPlan.cpp" />
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="LexerError.cpp" />
+    <ClCompile Include="mainRender.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="ParserError.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="MyResourceManager.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Token.cpp" />
+    <ClCompile Include="GlUtils.h" />
     <ClCompile Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
@@ -44,16 +46,20 @@
     <ClInclude Include="FloorPlan.h" />
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="LexerError.h" />
+    <ClInclude Include="MyResourceManager.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="ParserError.h" />
     <ClInclude Include="Renderer.h" />
-    <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Token.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="res\sample.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shaders\fragment.shader" />
+    <None Include="res\shaders\vertex.shader" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

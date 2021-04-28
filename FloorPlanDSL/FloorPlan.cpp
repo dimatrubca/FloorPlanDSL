@@ -1,19 +1,41 @@
 #pragma once
 
 #include "FloorPlan.h"
-#include "Renderer.h"
-#include "ResourceManager.h"
 
 Renderer* renderer;
 
 FloorPlan::FloorPlan(unsigned int width, unsigned int height) : width(width), height(height) {};
 FloorPlan::~FloorPlan()
 {
-	delete renderer;
+	//delete renderer;
 }
 
-void FloorPlan::init() {
-	ResourceManager::LoadShader("res/shaders/vertex.shader", "res/shaders/fragment.shader", nullptr, "rect");
 
-	glm::mat4 projection = glm::ortho(0.0f, this->width, this->height
+void FloorPlan::init() {
+	MyResourceManager::LoadShader("res/shaders/vertex.shader", "res/shaders/fragment.shader", "mainShader");
+	
+	glm::mat4 projection = glm::ortho(0.0f, 
+		(float)this->width, 0.0f, (float) this->height,-10.0f, 10.0f);
+		
+	MyResourceManager::GetShader("mainShader").use();
+	MyResourceManager::GetShader("mainShader").setMat4("projection", projection);
+
+	// set render specific controls
+	Shader shader = MyResourceManager::GetShader("mainShader");
+	renderer = new Renderer(shader);
+}
+
+void FloorPlan::render()
+{
+	for (auto drawable : drawableObjects) {
+		drawable->draw(*renderer);
+	}
+}
+
+void FloorPlan::processInput(float dt)
+{
+}
+
+void FloorPlan::update(float dt)
+{
 }

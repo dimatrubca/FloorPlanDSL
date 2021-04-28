@@ -5,6 +5,9 @@
 #include <map>
 
 #include "Utils.h"
+#include <GL/glew.h>
+
+class Renderer;
 
 typedef std::string ObjectType;
 
@@ -107,6 +110,8 @@ public:
 
 
 struct Border {
+	// float width, string color
+	Border() {};
 	Border(Measure* width, Color* color) : width(width), color(color) {};
 	Measure* width;
 	Color* color;
@@ -121,8 +126,39 @@ struct Position {
 	float x;
 	float y;
 
-	std::string toString() { return "{" + x->toString() + ", " + y->toString() + "}"; };
+	std::string toString() { return "{" + std::to_string(x) + ", " + std::to_string(y) + "}"; };
 };
+
+// abstract class
+class DrawableObject : public Object {
+public:
+	std::vector<float> vertices;
+	DrawableObject(ObjectType type);
+
+	void draw(Renderer& renderer);
+
+	void init() {
+		glGenVertexArrays(1, &this->VAO);
+		glGenBuffers(1, &this->VBO);
+
+		glBindVertexArray(this->VAO);
+		glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
+		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
+		std::cout << vertices.size() * sizeof(float) << "... " << '\n';
+		std::cout << sizeof(vertices) << '\n';	
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+
+		//glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindVertexArray(0);
+	}
+private:
+	unsigned int VAO;
+	unsigned int VBO;
+};
+
+
+
 
 class Room : public Object {
 public:
@@ -137,11 +173,11 @@ public:
 	Position* position;
 };
 
-class Wall : public Object {
+class Wall : public DrawableObject {
 public:
 	Wall(std::map<TokenType, Object*> params);
 	std::string toString() {return "Wall"; };
-	std::vector<float> vertices;
+	GLuint vertexBuffer;
 
 	// properties
 	Position start;
