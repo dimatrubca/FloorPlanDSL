@@ -20,7 +20,6 @@ Enviroment::Enviroment() {
 }
 
 void Enviroment::set(std::string name, Object* object) {
-	std::cout << "inserting into store, id: " << name << '\n';
 	store[name] = object;
 	//store.insert({ name, object });
 }
@@ -48,7 +47,7 @@ bool Enviroment::exists(std::string name) {
 Object* Enviroment::get(std::string name) {
 	if (!hasKey(store, name)) {
 		//throw
-		std::cout<<"unable to get object with id " << name << " from store\n";
+		std::cout<<"ERROR::Invalid identifier " << name << "\n";
 	}
 	return store[name];
 }

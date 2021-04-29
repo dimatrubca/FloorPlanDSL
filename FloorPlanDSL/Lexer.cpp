@@ -155,6 +155,14 @@ Token Lexer::NextToken() {
           tok = Token(ch, RBRACE, line, col);
           readChar();
           break;
+     case '[':
+          tok = Token(ch, LBRACKET, line, col);
+          readChar();
+          break;
+     case ']':
+          tok = Token(ch, RBRACKET, line, col);
+          readChar();
+          break;
      case '"': {
           int endStringPos = input.find('"', position + 1);
 

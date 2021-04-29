@@ -308,9 +308,9 @@ Object* Evaluator::evalMeasureLiteral(MeasureLiteralNode* node) {
 		value = floatObj->value;
 	}
 
-	if (value == -100) {
+	/*if (value == -100) {
 		std::cout << "eval measure literal value not identifier";
-	}
+	}*/
 
 	return new Measure(value, node->unit);
 }
@@ -320,7 +320,12 @@ Object* Evaluator::evalIndexExpression(IndexExpressionNode* node) {
 	auto index = eval(node->index);
 
 	auto arrObject = dynamic_cast<Array*>(arr);
-	auto indexInt = dynamic_cast<Integer*>(arr);
+	auto indexInt = dynamic_cast<Integer*>(index);
+
+	if (indexInt->value >= arrObject->elements.size()) {
+		std::cout << "ERROR::index out of bounds\n";
+		return 0;
+	}
 
 	return arrObject->elements.at(indexInt->value);
 }

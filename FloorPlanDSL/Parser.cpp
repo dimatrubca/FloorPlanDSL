@@ -23,7 +23,7 @@ Parser::Parser(Lexer& lexer) : lexer(lexer) {
 	infixFuncs[LPAREN] = &Parser::parseCallExpression;
 	infixFuncs[LBRACKET] = &Parser::parseIndexExpression;
 
-	// precendences ???
+	// precendences 
 	precendences[PLUS] = Precendence::SUM;
 	precendences[MINUS] = Precendence::SUM;
 	precendences[SLASH] = Precendence::PRODUCT;
