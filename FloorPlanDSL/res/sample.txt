@@ -1,3 +1,5 @@
+! 1000 x 500
+
 Wall(
 	id: "abd",
 	start: {150mm, 50mm},
@@ -10,6 +12,13 @@ float initialAngle = 90.0;
 Room( 
 	id: "room1", size: {150mm, 150mm, 150mm, 150mm, 220mm},
 	angles: {initialAngle, 110.0,140.0, 110.0, 90.0},
-	border:{10mm, silver},
+	border:{10mm, #FF00FF},
 	position: {450mm, 250mm}
+);
+
+Room( 
+	id: "room2", size: {100mm, 100mm, 100mm, 100mm},
+	angles: {initialAngle, 90.0, 90.0, 90.0},
+	border:{10mm, #F80088},
+	position: {250mm, 150mm}
 );

@@ -46,6 +46,9 @@ ProgramNode* Parser::parseProgram() {
 		else if (currToken.type == IDENTIFIER && peekToken.type == ASSIGN) {
 			statement = parseAssignmentStatement();
 		}
+		else if (currToken.type == EXCLAM_MARK) {
+			statement = parseHeader();
+		}
 		else {
 			statement = parseExpressionStatement();
 		}
@@ -55,6 +58,33 @@ ProgramNode* Parser::parseProgram() {
 	}
 
 	return program;
+}
+
+HeaderStatementNode* Parser::parseHeader() {
+	HeaderStatementNode* header = new HeaderStatementNode(currToken);
+
+	// TODO: check errors
+	if (peekToken.type != INT_LITERAL) {
+		return nullptr;
+	}
+
+	advance();
+
+	header->width = stoi(currToken.literal);
+
+	if (peekToken.literal != "x") {
+		return nullptr;
+	}
+	advance();
+
+	if (peekToken.type != INT_LITERAL) {
+		return nullptr;
+	}
+	advance();
+
+	header->height = stoi(currToken.literal);
+
+	return header;
 }
 
 ExpressionStatementNode* Parser::parseExpressionStatement() {

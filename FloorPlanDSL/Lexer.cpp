@@ -163,6 +163,10 @@ Token Lexer::NextToken() {
           tok = Token(ch, RBRACKET, line, col);
           readChar();
           break;
+     case '!':
+          tok = Token(ch, EXCLAM_MARK, line, col);
+          readChar();
+          break;
      case '"': {
           int endStringPos = input.find('"', position + 1);
 

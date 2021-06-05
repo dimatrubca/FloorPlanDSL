@@ -4,6 +4,18 @@
 #include "Evaluator.h"
 #include "Utils.h"
 
+Object* setSize(Object* widthNode, Object* heightNode) {
+	auto width = dynamic_cast<IntegerLiteralNode*>(widthNode);
+	auto height = dynamic_cast<IntegerLiteralNode*>(heightNode);
+
+	if (!width || !height) {
+		std::cout << "INVALID setSize parameters";
+		// raise error
+	}
+
+	return nullptr;
+}
+	
 Evaluator::Evaluator(Enviroment* env) {
 	this->env = env;
 }
@@ -23,6 +35,10 @@ Object* Evaluator::eval(Node* node) {
 
 	if (auto statement = dynamic_cast<ExpressionStatementNode*>(node)) {
 		return evalExpressionStatement(statement);
+	}
+
+	if (auto statement = dynamic_cast<HeaderStatementNode*>(node)) {
+		return evalHeaderStatement(statement);
 	}
 
 	if (auto prefixNode = dynamic_cast<PrefixExpressionNode*>(node)) {
@@ -96,6 +112,13 @@ Object* Evaluator::evalProgram(ProgramNode* program) {
 
 Object* Evaluator::evalExpressionStatement(ExpressionStatementNode* stmt) {
 	return eval(stmt->expression);
+}
+
+Object* Evaluator::evalHeaderStatement(HeaderStatementNode* stmt) {
+	env->windowWidth = stmt->width;
+	env->windowHeight = stmt->height;
+
+	return nullptr;
 }
 
 Object* Evaluator::evalDeclarationStatement(DeclarationStatementNode* stmt) {

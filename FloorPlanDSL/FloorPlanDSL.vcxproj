@@ -27,6 +27,7 @@
     <ClCompile Include="FloorPlan.cpp" />
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="LexerError.cpp" />
+    <ClCompile Include="main2.cpp" />
     <ClCompile Include="mainRender.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Parser.cpp" />

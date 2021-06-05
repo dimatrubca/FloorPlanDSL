@@ -15,6 +15,7 @@ private:
 	Object* evalExpressionStatement(ExpressionStatementNode* stmt);
 	Object* evalAssignmentStatement(AssignmentStatementNode* stmt);
 	Object* evalDeclarationStatement(DeclarationStatementNode* stmt);
+	Object* evalHeaderStatement(HeaderStatementNode* stmt);
 	Object* evalStructureStatement(StructureStatementNode* structure);
 	std::pair<TokenType, Object*> evalPropertyNode(PropertyNode* prop);
 	Object* evalPrefixExpression(TokenType op, Object* right);

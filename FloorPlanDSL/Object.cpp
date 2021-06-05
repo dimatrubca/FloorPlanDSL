@@ -27,6 +27,26 @@ Position DrawableObject::getAdjacentPos(Position pos, float width, float alpha) 
 	return adjacentPos;
 }
 
+Position DrawableObject::getSegmentIntersection(Position a, Position b, Position c, Position d) {
+	double A1 = b.y - a.y;
+	double B1 = a.x - b.x;
+	double C1 = A1 * b.x + B1 * b.y;
+
+	double A2 = d.y - c.y;
+	double B2 = c.x - d.x;
+	double C2 = A2 * d.x + B2 * d.y;
+	
+
+	// compute intersection
+	double det = A1 * B2 - A2 * B1;
+
+	double x = (B2 * C1 - B1 * C2) / det;
+	double y = (A1 * C2 - A2 * C1) / det;
+
+	Position pos(x, y);
+	return pos;
+}
+
 void DrawableObject::addBufferVertices(Position pos1, Position pos2, Position pos3, std::vector<float> &vertices) {
 	vertices.push_back(pos1.x);
 	vertices.push_back(pos1.y);
@@ -121,6 +141,53 @@ Room::Room(std::map<TokenType, Object*> params) : DrawableObject(ROOM_OBJ, param
 	setVertices();
 };
 
+Bed::Bed(std::map<TokenType, Object*> params) : DrawableObject(Bed_OBJ, params) {
+	if (hasKey(params, WIDTH_PROP)) {
+		Measure* width = dynamic_cast<Measure*>(params[WIDTH_PROP]);
+
+		width->value;
+	}
+}
+
+Door::Door(std::map<TokenType, Object*> params, std::vector<Room*> rooms) : DrawableObject(DOOR_OBJ, params) {
+	// TODO: require props
+	/*String* idParent = dynamic_cast<Door*>(params[ID_PARENT_PROP]);
+	Integer* wallNr = dynamic_cast<String*>(params[WALL_PROP]);
+	Measure* startOnWall = dynamic_cast<Measure*>(params[START_ON_WALL_PROP]);
+	Measure* length = dynamic_cast<Measure*>(params[LENGTH_PROP]);
+
+	if (!idParent || !wallNr || !startOnWall || !length) {
+		std::cout << "Invalid Door props";
+		// throw error
+	}
+
+	Room* parentRoom = nullptr;
+
+	for (auto room : rooms)
+	{
+		if (room->id == idParent->value) {
+			parentRoom = room;
+			break;
+		}
+	}
+
+	if (!parentRoom) {
+		std::cout << "Invalid parent id";
+		// throw
+	}
+
+	if (parentRoom->vertices.size() < wallNr->value) {
+		std::cout << "Invalid Wall Number";
+	}
+
+	// set start pos
+	// set end pos
+
+	//Position start(parentRoom->vertices.);
+
+	///parentRoom->vertices[0];*/
+}
+
 
 std::string Room::toString() {
 	std::stringstream ss;
@@ -202,26 +269,66 @@ void Wall::setVertices() {
 	for (int i = 0; i < 6; i++) colors.insert(colors.end(), this->border.color->rgb, this->border.color->rgb + 3);
 }
 
+
 void Room::setVertices() {
 	Position currPos = startPosition;
 	float prevAngle = 0;
 
 	float width = this->border->width->value;
 
-	std::cout << M_PI;
+	std::vector<Position> points;
+	std::vector<Position> borderPoints;
+	std::vector<Position> adjBorderPoints;
+
 
 	for (int i = 0; i < sizes.size(); i++) {
-		float angle = angles[i]/180*M_PI + prevAngle - M_PI * (i != 0); // ???
-
+		float angle = angles[i] / 180 * M_PI + prevAngle - M_PI * (i != 0); // ?
+		
 		Position nextPos = getNextPos(currPos, sizes[i], angle);
 		Position currAdjacent = getAdjacentPos(currPos, width, angle);
 		Position nextAdjacent = getAdjacentPos(nextPos, width, angle);
-
+		/*
 		addBufferVertices(currPos, nextPos, currAdjacent, vertices);
-		addBufferVertices(nextPos, currAdjacent, nextAdjacent, vertices);
+		addBufferVertices(nextPos, currAdjacent, nextAdjacent, vertices);*/
+
+
+
+		points.push_back(currPos);
+		points.push_back(nextPos);
+
+		borderPoints.push_back(currAdjacent);
+		borderPoints.push_back(nextAdjacent);
 
 		currPos = nextPos;
 		prevAngle = angle;
+	}
+
+	Position prevIntersection = borderPoints[0];
+
+	if (abs(points.back().x - points[0].x) <= 0.001 && abs(points.back().y - points[0].x <= 0.001)) {
+		points.push_back(points[0]);
+		points.push_back(points[1]);
+
+		borderPoints.push_back(borderPoints[0]);
+		borderPoints.push_back(borderPoints[1]);
+	}
+	
+	for (int i = 0; i + 3 < borderPoints.size(); i += 2) {
+		Position intersection = getSegmentIntersection(borderPoints[i], borderPoints[i + 1],
+			borderPoints[i + 2], borderPoints[i + 3]);
+
+
+		adjBorderPoints.push_back(prevIntersection);
+		adjBorderPoints.push_back(intersection);
+		prevIntersection = intersection;
+	}
+
+	adjBorderPoints.push_back(adjBorderPoints.back());
+	adjBorderPoints.push_back(borderPoints.back());
+
+	for (int i = 0; i < points.size() && i < adjBorderPoints.size(); i += 2) {
+		addBufferVertices(points[i], points[i+1], adjBorderPoints[i], vertices);
+		addBufferVertices(points[i + 1], adjBorderPoints[i], adjBorderPoints[i + 1], vertices);
 	}
 
 	addBufferColors(border->color->rgb, sizes.size() * 6, this->colors); // double check
@@ -299,7 +406,6 @@ GLenum glCheckError_2(const char* file, int line)
 
 void DrawableObject::draw(Renderer& renderer) {
 	glCheckError2();
-	this->vertices;
 	renderer.draw(VAO, this->vertices.size() / 3);
 	glCheckError2();
 }

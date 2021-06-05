@@ -46,24 +46,22 @@ void Renderer::draw(GLuint VAO, int count) {
 	glDrawArrays(GL_TRIANGLES, 0, count); // double check division
 	glCheckError0();
 	glBindVertexArray(0);
-	
-	/*
-	this->shader.use();
-	unsigned int VBO2;
-	glGenBuffers(1, &VBO2);
-	unsigned int VAO2;
-	glGenVertexArrays(1, &VAO2);
-
-	glBindVertexArray(VAO2);
-	// 2. copy our vertices array in a buffer for OpenGL to use
-	glBindBuffer(GL_ARRAY_BUFFER, VBO2);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	// 3. then set our vertex attributes pointers
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-	glCheckError0();*/
 }
+/*
+void Renderer::drawWall(Wall* wall) {
+
+}
+
+void Renderer::drawRoom(Room* room) {
+
+}
+
+void Renderer::drawDoor(Door* door) {
+
+}
+
+void Renderer::drawSprite(){}
+*/
 
 void Renderer::initRenderData() {
 

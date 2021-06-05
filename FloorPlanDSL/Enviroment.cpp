@@ -21,7 +21,6 @@ Enviroment::Enviroment() {
 
 void Enviroment::set(std::string name, Object* object) {
 	store[name] = object;
-	//store.insert({ name, object });
 }
 
 void Enviroment::update(std::string name, Object* object) {
@@ -50,4 +49,18 @@ Object* Enviroment::get(std::string name) {
 		std::cout<<"ERROR::Invalid identifier " << name << "\n";
 	}
 	return store[name];
+}
+
+std::vector<DrawableObject*> Enviroment::getDrawableObjects() {
+	std::vector<DrawableObject*> drawables;
+
+	for (auto it = store.begin(); it != store.end(); it++)
+	{
+		if (auto drawableObj = dynamic_cast<DrawableObject*>(it->second))
+		{
+			drawables.push_back(drawableObj);
+		}
+	}
+
+	return drawables;
 }

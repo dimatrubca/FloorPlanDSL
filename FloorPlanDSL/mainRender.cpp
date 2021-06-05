@@ -1,4 +1,4 @@
-#include <iostream>
+/*#include <iostream>
 #include "glm/vec2.hpp"
 #include "glm/vec3.hpp"
 #include <GL/glew.h>
@@ -54,7 +54,7 @@ const unsigned int SCREEN_WIDTH = 800;
 // The height of the screen
 const unsigned int SCREEN_HEIGHT = 600;
 
-FloorPlan floorPlan(SCREEN_WIDTH, SCREEN_HEIGHT);
+FloorPlan floorPlan(""/*SCREEN_WIDTH, SCREEN_HEIGHT);
 
 void printParserErrors2(std::vector<ParserError*> const& errors) {
      for (auto err : errors) {
@@ -80,6 +80,13 @@ void REPL() {
      }
 
      Object* evalResult = evaluator.eval(program);
+     int width = evaluator.env->windowWidth;
+     int height = evaluator.env->windowHeight;
+
+     std::cout << width << " " << height << '\n';
+
+
+
      if (evalResult) {
           std::cout << evalResult->toString();
           std::cout << '\n';
@@ -102,7 +109,7 @@ void REPL() {
      }
 }
 
-int main() {
+int main3() {
 	if (!glfwInit())
           return -1;
 
@@ -188,7 +195,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
                floorPlan.Keys[key] = true;
           else if (action == GLFW_RELEASE)
                floorPlan.Keys[key] = false;
-     }*/
+     }
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -196,4 +203,4 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
      // make sure the viewport matches the new window dimensions; note that width and 
      // height will be significantly larger than specified on retina displays.
      glViewport(0, 0, width, height);
-}
+}*/

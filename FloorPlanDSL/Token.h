@@ -31,6 +31,8 @@ const TokenType RBRACE = "}";
 const TokenType LBRACKET = "[";
 const TokenType RBRACKET = "]";
 
+const TokenType EXCLAM_MARK = "!";
+
 // keywords
 const TokenType INT = "INT"; 
 const TokenType STRING = "STRING";

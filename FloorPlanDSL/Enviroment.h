@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+
 #include "Object.h"
 #include "Utils.h"
 
@@ -9,9 +11,16 @@ public:
 	void update(std::string name, Object* object);
 	Object* get(std::string name);
 	bool exists(std::string name);
+	std::vector<DrawableObject*> getDrawableObjects();
+	std::vector<Wall*> getAllWalls();
 
+	int windowWidth = 600;
+	int windowHeight = 600;
 private:
 	std::map<std::string, Object*> store;
-	//std::map<std::string, Room*> rooms;
+	std::vector<Room*> rooms;
+	std::vector<Wall*> walls;
+	std::vector<Door*> doors;
+	std::vector<Window*> windows;
 };
 

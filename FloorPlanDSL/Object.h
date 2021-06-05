@@ -20,8 +20,10 @@ const ObjectType ARRAY_OBJ = "ARRAY";
 const ObjectType ROOM_OBJ = "ROOM";
 const ObjectType WALL_OBJ = "WALL";
 const ObjectType DOOR_OBJ = "DOOR";
+const ObjectType Bed_OBJ = "BED";
 const ObjectType NULL_OBJ = "NULL";
 const ObjectType ERROR_OBJ = "ERROR_OBJ";
+const ObjectType BUILTIN_OBJ = "BUILTIN";
 
 
 
@@ -33,6 +35,16 @@ public:
 
 private:
 	ObjectType type;
+};
+
+class Builtin : public Object {
+public:
+	Builtin(Object* (*fn)(std::vector<Object*>&)) : Object(BUILTIN_OBJ), function(fn) { }
+	~Builtin() {}
+	std::string Inspect() { return "builtin function"; }
+	std::string toString() { return ""; }
+
+	Object* (*function)(std::vector<Object*>&);
 };
 
 class Integer : public Object {
@@ -136,6 +148,7 @@ struct Position {
 	std::string toString() { return "{" + std::to_string(x) + ", " + std::to_string(y) + "}"; };
 };
 
+
 // abstract class
 class DrawableObject : public Object {
 public:
@@ -175,6 +188,7 @@ public:
 protected:
 	static Position getNextPos(Position pos, float length, float alpha);
 	static Position getAdjacentPos(Position pos, float width, float alpha);
+	static Position getSegmentIntersection(Position a, Position b, Position c, Position d);
 	static void addBufferVertices(Position pos1, Position pos2, Position pos3, std::vector<float> &vertices);
 	static void addBufferColors(int rgb[3], int count, std::vector<float>& colors);
 private:
@@ -214,6 +228,31 @@ public:
 	float angle;
 
 	void setVertices();
+};
+
+class Bed : public DrawableObject {
+public:
+	Bed(std::map<TokenType, Object*> params);
+	std::string toString() {
+		return "Bed";
+	};
+
+	// properties
+	float width, height;
+	float rotation;
+	Position position; // bottom left corner
+};
+
+class Door : public DrawableObject {
+public:
+	Door(std::map<TokenType, Object*> params, std::vector<Room*> room);
+	std::string toString() {
+		return "Door";
+	};
+
+	// properties
+	Position start, end;
+	float width;
 };
 
 class Window : public Object {

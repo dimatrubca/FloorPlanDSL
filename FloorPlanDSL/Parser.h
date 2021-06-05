@@ -39,6 +39,7 @@ private:
 	StatementNode* parseDeclarationStatement();
 	AssignmentStatementNode* parseAssignmentStatement();
 	StructureStatementNode* parseStructureDeclaration();
+	HeaderStatementNode* parseHeader();
 	ExpressionStatementNode* parseExpressionStatement();
 	PropertyNode* parsePropertyNode();
 	ExpressionNode* parseExpression(Precendence precendence, bool);

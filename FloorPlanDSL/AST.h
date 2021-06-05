@@ -10,6 +10,7 @@ enum class AstNodeType {
 	AssignmentStatement,
 	DeclarationStatement,
 	ExpressionStatement,
+	HeaderStatement,
 	Structure,
 	Property,
 	PrefixExpression,
@@ -22,7 +23,7 @@ enum class AstNodeType {
 	MeasureLiteral,
 	ColorLiteral,
 	ArrayLiteral,
-	StringLiteral
+	StringLiteral,
 };
 
 extern std::map<AstNodeType, std::string> AstNodeTypeToString;
@@ -56,6 +57,8 @@ public:
 };
 
 
+
+
 // Root Node
 class ProgramNode : public Node {
 public:
@@ -75,6 +78,15 @@ public:
 	AstNodeType getType() { return AstNodeType::Identifier; }
 
 	std::string value;
+};
+
+class HeaderStatementNode : public StatementNode {
+public:
+	HeaderStatementNode(Token token) : StatementNode(token) {};
+	std::string toString() { return "# size: " + std::to_string(width) + " x " + std::to_string(height); }
+	AstNodeType getType() { return AstNodeType::HeaderStatement; }
+
+	int width, height;
 };
 
 
@@ -108,6 +120,7 @@ public:
 
 	ExpressionNode* expression;
 };
+
 
 class PropertyNode : public ExpressionNode {
 public:

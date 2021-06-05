@@ -6,12 +6,13 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/glm.hpp"
 #include "GlUtils.h"
+#include "AST.h"
 
 class FloorPlan {
 public:
 	std::vector<DrawableObject*> drawableObjects;
 	unsigned int width, height;
-	FloorPlan(unsigned int width, unsigned int height);
+	FloorPlan(std::string sourceCodePath);
 	~FloorPlan();
 
 	// load shaders...
@@ -20,4 +21,9 @@ public:
 	void processInput(float dt);
 	void update(float dt);
 	void render();
+	void build();
+
+private:
+	std::string sourceCodePath;
+	ProgramNode* program;
 };
