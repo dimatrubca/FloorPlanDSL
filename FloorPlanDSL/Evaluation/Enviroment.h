@@ -1,8 +1,8 @@
 #pragma once
 #include <vector>
 
-#include "Object.h"
-#include "Utils.h"
+#include "../Objects/Object.h"
+#include "../Utils.h"
 
 class Enviroment {
 public:

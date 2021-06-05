@@ -1,8 +1,8 @@
 #include <map>
 
-#include "Object.h"
+#include "../Objects/Object.h"
 #include "Evaluator.h"
-#include "Utils.h"
+#include "../Utils.h"
 
 Object* setSize(Object* widthNode, Object* heightNode) {
 	auto width = dynamic_cast<IntegerLiteralNode*>(widthNode);

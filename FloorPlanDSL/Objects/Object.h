@@ -4,7 +4,7 @@
 #include <sstream>
 #include <map>
 
-#include "Utils.h"
+#include "../Utils.h"
 #include <GL/glew.h>
 #define hexToInt(ch) (ch >= 'A' ? ch - 'A' + 10 : ch - '0')
 class Renderer;
@@ -207,6 +207,7 @@ public:
 	// properties
 	std::vector<float> sizes;
 	std::vector<float> angles;
+	//std::vector<Position> vertices;
 	Position startPosition;
 	//std::vector<Measure*> size;
 	//std::vector<FloatObject*> angles;

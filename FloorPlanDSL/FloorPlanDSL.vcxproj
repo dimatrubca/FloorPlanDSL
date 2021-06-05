@@ -19,41 +19,43 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AST.cpp" />
-    <ClCompile Include="Enviroment.cpp" />
-    <ClCompile Include="Error.cpp" />
-    <ClCompile Include="Evaluator.cpp" />
-    <ClCompile Include="Error.h" />
-    <ClCompile Include="FloorPlan.cpp" />
-    <ClCompile Include="Lexer.cpp" />
-    <ClCompile Include="LexerError.cpp" />
+    <ClCompile Include="Parsing\AST.cpp" />
+    <ClCompile Include="Evaluation\Enviroment.cpp" />
+    <ClCompile Include="Parsing\Error.cpp" />
+    <ClCompile Include="Evaluation\Evaluator.cpp" />
+    <ClCompile Include="Parsing\Error.h" />
+    <ClCompile Include="Rendering\FloorPlan.cpp" />
+    <ClCompile Include="Parsing\Lexer.cpp" />
+    <ClCompile Include="Parsing\LexerError.cpp" />
     <ClCompile Include="main2.cpp" />
     <ClCompile Include="mainRender.cpp" />
-    <ClCompile Include="Object.cpp" />
-    <ClCompile Include="Parser.cpp" />
-    <ClCompile Include="ParserError.cpp" />
+    <ClCompile Include="Objects\Object.cpp" />
+    <ClCompile Include="Objects\Room.cpp" />
+    <ClCompile Include="Parsing\Parser.cpp" />
+    <ClCompile Include="Parsing\ParserError.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="MyResourceManager.cpp" />
-    <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="Token.cpp" />
-    <ClCompile Include="GlUtils.h" />
+    <ClCompile Include="Rendering\Renderer.cpp" />
+    <ClCompile Include="Rendering\MyResourceManager.cpp" />
+    <ClCompile Include="Rendering\Shader.cpp" />
+    <ClCompile Include="Parsing\Token.cpp" />
+    <ClCompile Include="Rendering\GlUtils.h" />
     <ClCompile Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AST.h" />
-    <ClInclude Include="Enviroment.h" />
-    <ClInclude Include="Evaluator.h" />
-    <ClInclude Include="FloorPlan.h" />
-    <ClInclude Include="Lexer.h" />
-    <ClInclude Include="LexerError.h" />
-    <ClInclude Include="MyResourceManager.h" />
-    <ClInclude Include="Object.h" />
-    <ClInclude Include="Parser.h" />
-    <ClInclude Include="ParserError.h" />
-    <ClInclude Include="Renderer.h" />
-    <ClInclude Include="Shader.h" />
-    <ClInclude Include="Token.h" />
+    <ClInclude Include="Parsing\AST.h" />
+    <ClInclude Include="Evaluation\Enviroment.h" />
+    <ClInclude Include="Evaluation\Evaluator.h" />
+    <ClInclude Include="Rendering\FloorPlan.h" />
+    <ClInclude Include="Parsing\Lexer.h" />
+    <ClInclude Include="Parsing\LexerError.h" />
+    <ClInclude Include="Rendering\MyResourceManager.h" />
+    <ClInclude Include="Objects\Object.h" />
+    <ClInclude Include="Objects\Room.h" />
+    <ClInclude Include="Parsing\Parser.h" />
+    <ClInclude Include="Parsing\ParserError.h" />
+    <ClInclude Include="Rendering\Renderer.h" />
+    <ClInclude Include="Rendering\Shader.h" />
+    <ClInclude Include="Parsing\Token.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="res\sample.txt" />

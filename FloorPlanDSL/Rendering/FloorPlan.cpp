@@ -19,9 +19,9 @@
 #include "glm/glm.hpp"
 
 #include "FloorPlan.h"
-#include "Evaluator.h"
-#include "Lexer.h"
-#include "Parser.h"
+#include "../Evaluation/Evaluator.h"
+#include "../Parsing/Lexer.h"
+#include "../Parsing/Parser.h"
 
 Renderer* renderer;
 

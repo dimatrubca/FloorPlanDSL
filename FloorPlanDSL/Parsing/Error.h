@@ -16,7 +16,6 @@ public:
                throw new Error(message.c_str());
           }
      }
-
 private:
      char const* message;
 };

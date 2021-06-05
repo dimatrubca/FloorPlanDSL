@@ -5,9 +5,9 @@
 #include <cmath>
 #include <corecrt_math_defines.h>
 
-#include "Token.h"
+#include "Parsing/Token.h"
 #include <map>
-#include "Object.h"
+#include "Objects/Object.h"
 
 static bool isLetter(char ch) {
      return ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z' || ch == '_';

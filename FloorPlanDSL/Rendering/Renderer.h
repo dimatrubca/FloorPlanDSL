@@ -1,9 +1,8 @@
 #pragma once
 #include <iostream>
-#include "Token.h"
-#include "Object.h"
+#include "../Parsing/Token.h"
+#include "../Objects/Object.h"
 #include "Shader.h"
-#include "Object.h"
 #include "GlUtils.h"
 
 class Renderer

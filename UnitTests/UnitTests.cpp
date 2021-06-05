@@ -5,11 +5,11 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 
-#include "../FloorPlanDSL/Evaluator.h"
-#include "../FloorPlanDSL/Parser.h"
-#include "../FloorPlanDSL/Lexer.h"
-#include "../FloorPlanDSL/ParserError.h"
-#include "../FloorPlanDSL/Evaluator.h"
+#include "../FloorPlanDSL/Evaluation/Evaluator.h"
+#include "../FloorPlanDSL/Parsing/Parser.h"
+#include "../FloorPlanDSL/Parsing/Lexer.h"
+#include "../FloorPlanDSL/Parsing/ParserError.h"
+#include "../FloorPlanDSL/Evaluation/Evaluator.h"
 
 #include <variant>
 

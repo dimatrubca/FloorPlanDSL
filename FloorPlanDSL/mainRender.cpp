@@ -19,7 +19,7 @@
 #include "FloorPlan.h"
 #include "Evaluator.h"
 #include "Lexer.h"
-#include "Parser.h"
+#include "Parsing/Parser.h"
 
 
 GLenum glCheckError_(const char* file, int line)

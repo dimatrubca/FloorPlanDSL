@@ -1,9 +1,9 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include "Lexer.h"
-#include "Parser.h"
-#include "Evaluator.h"
+#include "Parsing/Lexer.h"
+#include "Parsing/Parser.h"
+#include "Evaluation/Evaluator.h"
 #include <variant>
 
 void printParserErrors(std::vector<ParserError*> const &errors) {

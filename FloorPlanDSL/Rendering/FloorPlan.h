@@ -6,7 +6,7 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/glm.hpp"
 #include "GlUtils.h"
-#include "AST.h"
+#include "../Parsing/AST.h"
 
 class FloorPlan {
 public:

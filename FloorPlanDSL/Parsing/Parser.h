@@ -5,7 +5,7 @@
 #include <functional>
 #include "AST.h"
 #include "Lexer.h"
-#include "Utils.h"
+#include "../Utils.h"
 #include "ParserError.h"
 
 enum class Precendence {

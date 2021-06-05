@@ -1,6 +1,6 @@
 #include "Object.h"
-#include "Error.h"
-#include "Renderer.h"
+#include "../Parsing/Error.h"
+#include "../Rendering/Renderer.h"
 #include <math.h>
 #define _USE_MATH_DEFINES
 

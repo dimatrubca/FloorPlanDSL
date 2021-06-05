@@ -1,5 +1,5 @@
 #include<iostream>
-#include "FloorPlan.h"
+#include "Rendering/FloorPlan.h"
 
 int main() {
 	FloorPlan floorPlan("res/sample.txt");

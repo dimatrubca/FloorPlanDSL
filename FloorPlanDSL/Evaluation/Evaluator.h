@@ -1,7 +1,7 @@
 #pragma once
-#include "Object.h"
+#include "../Objects/Object.h"
 #include "Enviroment.h"
-#include "AST.h"
+#include "../Parsing/AST.h"
 
 class Evaluator {
 public:
