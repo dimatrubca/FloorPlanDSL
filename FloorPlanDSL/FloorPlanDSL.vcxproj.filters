@@ -78,6 +78,21 @@
     <ClCompile Include="Rendering\FloorPlan.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Objects\Window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Door.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Bed.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Table.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Wall.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Objects\Room.h">
@@ -122,6 +137,21 @@
     <ClInclude Include="Rendering\FloorPlan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Objects\Window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Door.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Bed.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Table.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Wall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="res\sample.txt" />
@@ -129,5 +159,7 @@
   <ItemGroup>
     <None Include="res\shaders\fragment.shader" />
     <None Include="res\shaders\vertex.shader" />
+    <None Include="res\shaders\spriteVertex.shader" />
+    <None Include="res\shaders\spriteFragment.shader" />
   </ItemGroup>
 </Project>

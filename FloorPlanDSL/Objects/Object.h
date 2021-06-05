@@ -4,10 +4,14 @@
 #include <sstream>
 #include <map>
 
+#include "../Parsing/Error.h"
 #include "../Utils.h"
+
 #include <GL/glew.h>
+
 #define hexToInt(ch) (ch >= 'A' ? ch - 'A' + 10 : ch - '0')
 class Renderer;
+class Room;
 
 typedef std::string ObjectType;
 
@@ -199,73 +203,8 @@ private:
 
 
 
-class Room : public DrawableObject {
-public:
-	Room(std::map<TokenType, Object*> params);
-	std::string toString();
 
-	// properties
-	std::vector<float> sizes;
-	std::vector<float> angles;
-	//std::vector<Position> vertices;
-	Position startPosition;
-	//std::vector<Measure*> size;
-	//std::vector<FloatObject*> angles;
-	Border* border;
 
-	void setVertices();
-};
-
-class Wall : public DrawableObject {
-public:
-	Wall(std::map<TokenType, Object*> params);
-	std::string toString() {return "Wall"; };
-	GLuint vertexBuffer;
-
-	// properties
-	Position start;
-	Position end;
-	Border border;
-	float angle;
-
-	void setVertices();
-};
-
-class Bed : public DrawableObject {
-public:
-	Bed(std::map<TokenType, Object*> params);
-	std::string toString() {
-		return "Bed";
-	};
-
-	// properties
-	float width, height;
-	float rotation;
-	Position position; // bottom left corner
-};
-
-class Door : public DrawableObject {
-public:
-	Door(std::map<TokenType, Object*> params, std::vector<Room*> room);
-	std::string toString() {
-		return "Door";
-	};
-
-	// properties
-	Position start, end;
-	float width;
-};
-
-class Window : public Object {
-public:
-	Window(std::map<TokenType, Object*> params);
-	std::string toString() { return "Window"; };
-
-	//
-	int wall;
-	Measure startOnWall;
-	Measure End;
-};
 
 
 class Array : public Object {

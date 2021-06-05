@@ -19,6 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Objects\Bed.cpp" />
+    <ClCompile Include="Objects\Door.cpp" />
+    <ClCompile Include="Objects\Table.cpp" />
+    <ClCompile Include="Objects\Wall.cpp" />
+    <ClCompile Include="Objects\Window.cpp" />
     <ClCompile Include="Parsing\AST.cpp" />
     <ClCompile Include="Evaluation\Enviroment.cpp" />
     <ClCompile Include="Parsing\Error.cpp" />
@@ -42,6 +47,11 @@
     <ClCompile Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Objects\Bed.h" />
+    <ClInclude Include="Objects\Door.h" />
+    <ClInclude Include="Objects\Table.h" />
+    <ClInclude Include="Objects\Wall.h" />
+    <ClInclude Include="Objects\Window.h" />
     <ClInclude Include="Parsing\AST.h" />
     <ClInclude Include="Evaluation\Enviroment.h" />
     <ClInclude Include="Evaluation\Evaluator.h" />
@@ -62,6 +72,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\fragment.shader" />
+    <None Include="res\shaders\spriteFragment.shader" />
+    <None Include="res\shaders\spriteVertex.shader" />
     <None Include="res\shaders\vertex.shader" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

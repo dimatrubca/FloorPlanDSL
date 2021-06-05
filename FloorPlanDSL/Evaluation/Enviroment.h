@@ -3,6 +3,9 @@
 
 #include "../Objects/Object.h"
 #include "../Utils.h"
+#include "../Objects/Wall.h"
+#include "../Objects/Door.h"
+#include "../Objects/Window.h"
 
 class Enviroment {
 public:

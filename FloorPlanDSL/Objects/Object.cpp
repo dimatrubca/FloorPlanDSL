@@ -1,11 +1,13 @@
 #include "Object.h"
-#include "../Parsing/Error.h"
+#include "Room.h"
 #include "../Rendering/Renderer.h"
+
 #include <math.h>
 #define _USE_MATH_DEFINES
 
 #include <cmath>
 #include <corecrt_math_defines.h>
+
 
 Position DrawableObject::getNextPos(Position pos, float length, float alpha) {
 	Position nextPos;
@@ -83,110 +85,8 @@ Measure::Measure(float value, TokenType unitType) : Object(MEASURE_OBJ) {
 }
 
 
-Room::Room(std::map<TokenType, Object*> params) : DrawableObject(ROOM_OBJ, params) {
 
-	if (hasKey(params, SIZE_PROP)) {
-		Array* sizeArray = dynamic_cast<Array*>(params[SIZE_PROP]);
-		Error::Assert(sizeArray != nullptr, "Invalid sizeArray property value");
 
-		for (auto elem : sizeArray->elements) {
-			Measure* length = dynamic_cast<Measure*>(elem);
-			Error::Assert(length != nullptr, "Invalid length in sizeArray");
-
-			sizes.push_back(length->value);
-		}
-	}
-
-	if (hasKey(params, ANGLES_PROP)) {
-		Array* anglesArray = dynamic_cast<Array*>(params[ANGLES_PROP]);
-		Error::Assert(anglesArray != nullptr, "Invalid angleArray property value");
-
-		for (auto elem : anglesArray->elements) {
-			FloatObject* angle = dynamic_cast<FloatObject*>(elem);
-			Error::Assert(angle != nullptr, "Invalid angle type in angleArray");
-
-			angles.push_back(angle->value);
-		}
-
-		Error::Assert(angles.size() == sizes.size(), "Length of sizeArray and anglesArray must be equal");
-	}
-	/*else {
-		for (int i = 0; i < size.size(); i++) angles.push_back(new FloatObject(""));
-	}*/
-
-	if (hasKey(params, BORDER_PROP)) {
-		Array* borderArray = dynamic_cast<Array*>(params[BORDER_PROP]);
-		Measure* width = dynamic_cast<Measure*>(borderArray->elements[0]);
-		Color* color = dynamic_cast<Color*>(borderArray->elements[1]);
-
-		Error::Assert(borderArray != nullptr, "Invalid borderArray"); // ? remove
-		Error::Assert(width != nullptr, "First element inside borderArray must be of type 'measure'");
-		Error::Assert(color != nullptr, "Second element inside borderArray must be of type 'color'");
-
-		border = new Border(width, color);
-	}
-
-	if (hasKey(params, POSITION_PROP)) {
-		Array* positionsArray = dynamic_cast<Array*>(params[POSITION_PROP]);
-		Measure* x = dynamic_cast<Measure*>(positionsArray->elements[0]);
-		Measure* y = dynamic_cast<Measure*>(positionsArray->elements[1]);
-
-		//MyError::Assert(positionsArray != nullptr, "Invalid positionsArray");
-		//MyError::Assert(x != nullptr, "First element inside positionsArray must be of type 'measure'");
-		//MyError::Assert(y != nullptr, "Second element inside positionsArray must be of type 'measure'");
-
-		startPosition = Position(x, y);
-	}
-
-	setVertices();
-};
-
-Bed::Bed(std::map<TokenType, Object*> params) : DrawableObject(Bed_OBJ, params) {
-	if (hasKey(params, WIDTH_PROP)) {
-		Measure* width = dynamic_cast<Measure*>(params[WIDTH_PROP]);
-
-		width->value;
-	}
-}
-
-Door::Door(std::map<TokenType, Object*> params, std::vector<Room*> rooms) : DrawableObject(DOOR_OBJ, params) {
-	// TODO: require props
-	/*String* idParent = dynamic_cast<Door*>(params[ID_PARENT_PROP]);
-	Integer* wallNr = dynamic_cast<String*>(params[WALL_PROP]);
-	Measure* startOnWall = dynamic_cast<Measure*>(params[START_ON_WALL_PROP]);
-	Measure* length = dynamic_cast<Measure*>(params[LENGTH_PROP]);
-
-	if (!idParent || !wallNr || !startOnWall || !length) {
-		std::cout << "Invalid Door props";
-		// throw error
-	}
-
-	Room* parentRoom = nullptr;
-
-	for (auto room : rooms)
-	{
-		if (room->id == idParent->value) {
-			parentRoom = room;
-			break;
-		}
-	}
-
-	if (!parentRoom) {
-		std::cout << "Invalid parent id";
-		// throw
-	}
-
-	if (parentRoom->vertices.size() < wallNr->value) {
-		std::cout << "Invalid Wall Number";
-	}
-
-	// set start pos
-	// set end pos
-
-	//Position start(parentRoom->vertices.);
-
-	///parentRoom->vertices[0];*/
-}
 
 
 std::string Room::toString() {
@@ -226,47 +126,6 @@ std::string Room::toString() {
 Position::Position(Measure* x, Measure* y) {
 	this->x = x->value;
 	this->y = y->value;
-}
-
-void Wall::setVertices() {
-	float dX = end.x - start.x;
-	float dY = end.y - start.y;
-
-	angle = atan2(dY, dX);
-	Position start2, end2;
-	float width = this->border.width->value;
-
-	start2.x = start.x - width * sin(angle);
-	start2.y = start.y + width * cos(angle);
-
-	end2.x = end.x - width * sin(angle);
-	end2.y = end.y + width * cos(angle);
-
-	vertices.push_back(start.x);
-	vertices.push_back(start.y);
-	vertices.push_back(0);
-
-	vertices.push_back(start2.x);
-	vertices.push_back(start2.y);
-	vertices.push_back(0);
-
-	vertices.push_back(end2.x);
-	vertices.push_back(end2.y);
-	vertices.push_back(0);
-
-	vertices.push_back(start.x);
-	vertices.push_back(start.y);
-	vertices.push_back(0);
-
-	vertices.push_back(end2.x);
-	vertices.push_back(end2.y);
-	vertices.push_back(0);
-
-	vertices.push_back(end.x);
-	vertices.push_back(end.y);
-	vertices.push_back(0);
-
-	for (int i = 0; i < 6; i++) colors.insert(colors.end(), this->border.color->rgb, this->border.color->rgb + 3);
 }
 
 
@@ -344,42 +203,6 @@ DrawableObject::DrawableObject(TokenType token, std::map<TokenType, Object*> par
 
 
 
-
-Wall::Wall(std::map<TokenType, Object*> params) : DrawableObject(WALL_OBJ, params) {
-	if (hasKey(params, START_PROPERTY)) {
-		Array* positionsArray = dynamic_cast<Array*>(params[START_PROPERTY]);
-		Measure* x = dynamic_cast<Measure*>(positionsArray->elements[0]);
-		Measure* y = dynamic_cast<Measure*>(positionsArray->elements[1]);
-
-		start = Position(x, y);
-	}
-
-	if (hasKey(params, END_PROP)) {
-		Array* positionsArray = dynamic_cast<Array*>(params[END_PROP]);
-		Measure* x = dynamic_cast<Measure*>(positionsArray->elements[0]);
-		Measure* y = dynamic_cast<Measure*>(positionsArray->elements[1]);
-
-		end = Position(x, y);
-	}
-
-	if (hasKey(params, BORDER_PROP)) {
-		Array* borderArray = dynamic_cast<Array*>(params[BORDER_PROP]);
-		Measure* width = dynamic_cast<Measure*>(borderArray->elements[0]);
-		Color* color = dynamic_cast<Color*>(borderArray->elements[1]);
-
-		Error::Assert(borderArray != nullptr, "Invalid borderArray"); // ? remove
-		Error::Assert(width != nullptr, "First element inside borderArray must be of type 'measure'");
-		Error::Assert(color != nullptr, "Second element inside borderArray must be of type 'color'");
-
-		border = Border(width, color);
-	}
-
-	// check color
-	//...
-
-	setVertices();
-	init();
-};
 
 GLenum glCheckError_2(const char* file, int line)
 {

@@ -2,6 +2,7 @@
 #include <iostream>
 #include "../Parsing/Token.h"
 #include "../Objects/Object.h"
+#include "../Objects/Wall.h"
 #include "Shader.h"
 #include "GlUtils.h"
 

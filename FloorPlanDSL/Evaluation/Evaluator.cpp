@@ -1,6 +1,7 @@
 #include <map>
 
 #include "../Objects/Object.h"
+#include "../Objects/Room.h"
 #include "Evaluator.h"
 #include "../Utils.h"
 
