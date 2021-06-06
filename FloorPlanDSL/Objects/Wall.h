@@ -5,7 +5,7 @@ class Wall : public DrawableObject {
 public:
 	Wall(std::map<TokenType, Object*> params);
 	std::string toString() { return "Wall"; };
-	GLuint vertexBuffer;
+	//GLuint vertexBuffer;
 
 	// properties
 	Position start;

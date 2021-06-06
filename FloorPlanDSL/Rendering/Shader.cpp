@@ -8,18 +8,28 @@ void Shader::use() const {
 }
 
 void Shader::setInt(const std::string& name, int value) const {
-	glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
+	glUniform1i(glGetUniformLocation(this->ID, name.c_str()), value);
 }
 
 void Shader::setFloat(const std::string& name, float value) const {
-	glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
+	glUniform1f(glGetUniformLocation(this->ID, name.c_str()), value);
+}
+
+void Shader::setVector3f(const std::string& name, float x, float y, float z) const {
+	glUniform3f(glGetUniformLocation(this->ID, name.c_str()), x, y, z);
+}
+
+void Shader::setVector3f(const std::string& name, const glm::vec3& value) const {
+	glUniform3f(glGetUniformLocation(this->ID, name.c_str()), value.x, value.y, value.z);
 }
 
 void Shader::setMat4(const std::string& name, glm::mat4 matrix) const {
 	glCheckError0();
-	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(matrix));
+	glUniformMatrix4fv(glGetUniformLocation(this->ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(matrix));
 	glCheckError0();
 }
+
+
 
 void Shader::compile(const char* vertexSrc, const char* fragmentSrc) {
 	// compile shaders

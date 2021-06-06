@@ -133,7 +133,7 @@ StructureStatementNode* Parser::parseStructureDeclaration() {
 	while (peekToken.type != RPAREN) {
 		requirePeekPropertyOf(ROOM);
 		PropertyNode* prop = parsePropertyNode();
-		structure->properties.push_back(prop);
+		structure->properties.push_back(prop);	
 		
 		if (peekToken.type != RPAREN && !expectPeek(COMMA)) return nullptr;
 	}

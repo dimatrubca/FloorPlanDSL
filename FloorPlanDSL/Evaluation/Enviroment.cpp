@@ -21,6 +21,25 @@ Enviroment::Enviroment() {
 
 void Enviroment::set(std::string name, Object* object) {
 	store[name] = object;
+
+	if (auto wall = dynamic_cast<Wall*>(object)) {
+		walls.push_back(wall);
+		return;
+	}
+
+	if (auto room = dynamic_cast<Room*>(object)) {
+		rooms.push_back(room);
+		return;
+	}
+
+	if (auto door = dynamic_cast<Door*>(object)) {
+		doors.push_back(door);
+		return;
+	}
+
+	if (auto bed = dynamic_cast<Bed*>(object)) {
+		beds.push_back(bed);
+	}
 }
 
 void Enviroment::update(std::string name, Object* object) {

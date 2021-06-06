@@ -130,68 +130,68 @@ Position::Position(Measure* x, Measure* y) {
 
 
 void Room::setVertices() {
-	Position currPos = startPosition;
-	float prevAngle = 0;
+	//Position currPos = startPosition;
+	//float prevAngle = 0;
 
-	float width = this->border->width->value;
+	//float width = this->border->width->value;
 
-	std::vector<Position> points;
-	std::vector<Position> borderPoints;
-	std::vector<Position> adjBorderPoints;
-
-
-	for (int i = 0; i < sizes.size(); i++) {
-		float angle = angles[i] / 180 * M_PI + prevAngle - M_PI * (i != 0); // ?
-		
-		Position nextPos = getNextPos(currPos, sizes[i], angle);
-		Position currAdjacent = getAdjacentPos(currPos, width, angle);
-		Position nextAdjacent = getAdjacentPos(nextPos, width, angle);
-		/*
-		addBufferVertices(currPos, nextPos, currAdjacent, vertices);
-		addBufferVertices(nextPos, currAdjacent, nextAdjacent, vertices);*/
+	//std::vector<Position> points;
+	//std::vector<Position> borderPoints;
+	//std::vector<Position> adjBorderPoints;
 
 
-
-		points.push_back(currPos);
-		points.push_back(nextPos);
-
-		borderPoints.push_back(currAdjacent);
-		borderPoints.push_back(nextAdjacent);
-
-		currPos = nextPos;
-		prevAngle = angle;
-	}
-
-	Position prevIntersection = borderPoints[0];
-
-	if (abs(points.back().x - points[0].x) <= 0.001 && abs(points.back().y - points[0].x <= 0.001)) {
-		points.push_back(points[0]);
-		points.push_back(points[1]);
-
-		borderPoints.push_back(borderPoints[0]);
-		borderPoints.push_back(borderPoints[1]);
-	}
-	
-	for (int i = 0; i + 3 < borderPoints.size(); i += 2) {
-		Position intersection = getSegmentIntersection(borderPoints[i], borderPoints[i + 1],
-			borderPoints[i + 2], borderPoints[i + 3]);
+	//for (int i = 0; i < sizes.size(); i++) {
+	//	float angle = angles[i] / 180 * M_PI + prevAngle - M_PI * (i != 0); // ?
+	//	
+	//	Position nextPos = getNextPos(currPos, sizes[i], angle);
+	//	Position currAdjacent = getAdjacentPos(currPos, width, angle);
+	//	Position nextAdjacent = getAdjacentPos(nextPos, width, angle);
+	//	/*
+	//	addBufferVertices(currPos, nextPos, currAdjacent, vertices);
+	//	addBufferVertices(nextPos, currAdjacent, nextAdjacent, vertices);*/
 
 
-		adjBorderPoints.push_back(prevIntersection);
-		adjBorderPoints.push_back(intersection);
-		prevIntersection = intersection;
-	}
 
-	adjBorderPoints.push_back(adjBorderPoints.back());
-	adjBorderPoints.push_back(borderPoints.back());
+	//	points.push_back(currPos);
+	//	points.push_back(nextPos);
 
-	for (int i = 0; i < points.size() && i < adjBorderPoints.size(); i += 2) {
-		addBufferVertices(points[i], points[i+1], adjBorderPoints[i], vertices);
-		addBufferVertices(points[i + 1], adjBorderPoints[i], adjBorderPoints[i + 1], vertices);
-	}
+	//	borderPoints.push_back(currAdjacent);
+	//	borderPoints.push_back(nextAdjacent);
 
-	addBufferColors(border->color->rgb, sizes.size() * 6, this->colors); // double check
-	init();
+	//	currPos = nextPos;
+	//	prevAngle = angle;
+	//}
+
+	//Position prevIntersection = borderPoints[0];
+
+	//if (abs(points.back().x - points[0].x) <= 0.001 && abs(points.back().y - points[0].x <= 0.001)) {
+	//	points.push_back(points[0]);
+	//	points.push_back(points[1]);
+
+	//	borderPoints.push_back(borderPoints[0]);
+	//	borderPoints.push_back(borderPoints[1]);
+	//}
+	//
+	//for (int i = 0; i + 3 < borderPoints.size(); i += 2) {
+	//	Position intersection = getSegmentIntersection(borderPoints[i], borderPoints[i + 1],
+	//		borderPoints[i + 2], borderPoints[i + 3]);
+
+
+	//	adjBorderPoints.push_back(prevIntersection);
+	//	adjBorderPoints.push_back(intersection);
+	//	prevIntersection = intersection;
+	//}
+
+	//adjBorderPoints.push_back(adjBorderPoints.back());
+	//adjBorderPoints.push_back(borderPoints.back());
+
+	//for (int i = 0; i < points.size() && i < adjBorderPoints.size(); i += 2) {
+	//	addBufferVertices(points[i], points[i+1], adjBorderPoints[i], vertices);
+	//	addBufferVertices(points[i + 1], adjBorderPoints[i], adjBorderPoints[i + 1], vertices);
+	//}
+
+	//addBufferColors(border->color->rgb, sizes.size() * 6, this->colors); // double check
+	//init();
 }
 
 DrawableObject::DrawableObject(TokenType token, std::map<TokenType, Object*> params) : Object(token) {

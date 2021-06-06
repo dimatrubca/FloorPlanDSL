@@ -5,13 +5,13 @@
 #include "Parsing/Parser.h"
 #include "Evaluation/Evaluator.h"
 #include <variant>
-
+/*
 void printParserErrors(std::vector<ParserError*> const &errors) {
      for (auto err : errors) {
           std::cout << err->what() << "\n";
      }
 }
-
+*/
 void rlpl() {
      std::ifstream file("res/sample.txt");
      std::string content((std::istreambuf_iterator<char>(file)),

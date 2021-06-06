@@ -1,5 +1,7 @@
 #include "Room.h"
 
+#include <cmath>
+#include <corecrt_math_defines.h>
 
 Room::Room(std::map<TokenType, Object*> params) : DrawableObject(ROOM_OBJ, params) {
 
@@ -56,5 +58,23 @@ Room::Room(std::map<TokenType, Object*> params) : DrawableObject(ROOM_OBJ, param
 		startPosition = Position(x, y);
 	}
 
-	setVertices();
+	vertices.push_back(startPosition);
+
+	float prevAngle = 0;
+	Position currPos = startPosition;
+
+	for (int i = 0; i < sizes.size(); i++) {
+		float angle = angles[i] / 180 * M_PI + prevAngle - M_PI * (i != 0); // ?
+
+		Position nextPos = getNextPos(currPos, sizes[i], angle);
+		vertices.push_back(nextPos);
+
+		currPos = nextPos;
+		prevAngle = angle;
+	}
+
+	if (vertices[0] != vertices.back()) {
+		vertices.push_back(vertices[0]);
+	}
+
 };

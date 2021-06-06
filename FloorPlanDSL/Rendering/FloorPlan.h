@@ -6,11 +6,12 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/glm.hpp"
 #include "GlUtils.h"
-#include "../Parsing/AST.h"
+#include "../Evaluation/Enviroment.h"
+#include "DrawableObjects/GlDrawableObject.h"
 
 class FloorPlan {
 public:
-	std::vector<DrawableObject*> drawableObjects;
+	std::vector<GlDrawableObject*> drawableObjects;
 	unsigned int width, height;
 	FloorPlan(std::string sourceCodePath);
 	~FloorPlan();
@@ -25,5 +26,5 @@ public:
 
 private:
 	std::string sourceCodePath;
-	ProgramNode* program;
+	Enviroment* env;
 };

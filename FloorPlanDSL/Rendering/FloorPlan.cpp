@@ -22,6 +22,9 @@
 #include "../Evaluation/Evaluator.h"
 #include "../Parsing/Lexer.h"
 #include "../Parsing/Parser.h"
+#include "DrawableObjects/DrawableWall.h"
+#include "DrawableObjects/DrawableRoom.h"
+#include "DrawableObjects/DrawableBed.h"
 
 Renderer* renderer;
 
@@ -34,15 +37,8 @@ FloorPlan::~FloorPlan()
 }
 
 
+
 void FloorPlan::init() {
-     // parse program
-
-     //glewExperimental = true; // Needed in core profile
-     //if (glewInit() != GLEW_OK) {
-     //     fprintf(stderr, "Failed to initialize GLEW (\n");
-     //     return;
-     //}
-
      std::ifstream file(sourceCodePath);
      std::string input((std::istreambuf_iterator<char>(file)),
           std::istreambuf_iterator<char>());
@@ -51,18 +47,47 @@ void FloorPlan::init() {
      lexer.SetInput(input);
 
      Parser parser(lexer);
-     this->program = parser.parseProgram();
+     ProgramNode* program = parser.parseProgram();
 
      if (parser.getErrors().size() != 0) {
-          std::cout << "parse errors, todo: print them";
-          return;
+          std::cout << "parse errors";
+          printParserErrors(parser.getErrors());
+          exit(0);
      }
 
-     //...
+     Evaluator evaluator(new Enviroment());
+
+     Object* evalResult = evaluator.eval(program);
+     this->width = evaluator.env->windowWidth;
+     this->height = evaluator.env->windowHeight;
+
+     std::cout << width << " x " << height << '\n';
+
+     if (evalResult) {
+          std::cout << evalResult->toString();
+          std::cout << '\n';
+          
+          this->env = evaluator.env;
+
+          for (auto wall : evaluator.env->walls) {
+               DrawableWall* drawableWall = new DrawableWall(wall);
+               this->drawableObjects.push_back((GlDrawableObject*) drawableWall);
+          }
+          
+          for (auto room : evaluator.env->rooms) {
+               DrawableRoom* drawableRoom = new DrawableRoom(room);
+               this->drawableObjects.push_back((GlDrawableObject*)drawableRoom);
+          }
+
+          for (auto bed : evaluator.env->beds) {
+               DrawableBed* drawableBed = new DrawableBed(bed);
+               this->drawableObjects.push_back((GlDrawableObject*)drawableBed);
+          }
+     }
 }
 
+//TODO: rename to render
 void FloorPlan::build() {
-
      if (!glfwInit())
           return;
 
@@ -71,7 +96,7 @@ void FloorPlan::build() {
      glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
      // create window
-     GLFWwindow* window = glfwCreateWindow(800, 600, "Floor Plan", NULL, NULL);
+     GLFWwindow* window = glfwCreateWindow(this->width, this->height, "Floor Plan", NULL, NULL);
      if (window == NULL) {
           std::cout << "Failed to create GLFW window" << std::endl;
           glfwTerminate();
@@ -85,7 +110,7 @@ void FloorPlan::build() {
           return;
      }
 
-     glViewport(0, 0, 800, 600);
+     glViewport(0, 0, this->width, this->height);
      glfwMakeContextCurrent(window);
 
      // tell GLFW to capture our mouse
@@ -94,52 +119,15 @@ void FloorPlan::build() {
 
      //glCheckError();
 
-     /* from init */
-     Evaluator evaluator(new Enviroment());
-
-     Object* evalResult = evaluator.eval(program);
-     this->width = evaluator.env->windowWidth;
-     this->height = evaluator.env->windowHeight;
-
-     std::cout << width << " x " << height << '\n';
-
-     if (evalResult) {
-          std::cout << evalResult->toString();
-          std::cout << '\n';
-     }
-
-     Object* wallOb = evaluator.env->get("abd");
-     Object* roomOb = evaluator.env->get("room1");
-
-     auto drawables = evaluator.env->getDrawableObjects();
-
-     this->drawableObjects.insert(drawableObjects.end(), drawables.begin(), drawables.end()); //
-     /*
-     if (Wall* wall = dynamic_cast<Wall*>(wallOb)) {
-          this->drawableObjects.push_back(wall);
-     }
-     else {
-          std::cout << "Error: no wall with id abd";
-     }
-
-     if (Room* room = dynamic_cast<Room*>(roomOb)) {
-          this->drawableObjects.push_back(room);
-     }
-     else {
-          std::cout << "Error: no room with id room1";
-     }
-     */
-
-     /* */
-
-     glfwSetWindowSize(window, this->width, this->height);
-     glViewport(0, 0, this->width, this->height);
-
-     /* */
-
      // draw all
-
+     glCheckError0();
      MyResourceManager::LoadShader("res/shaders/vertex.shader", "res/shaders/fragment.shader", "mainShader");
+     glCheckError0();
+     MyResourceManager::LoadShader("res/shaders/spriteVertex.shader", "res/shaders/spriteFragment.shader", "spriteShader");
+     glCheckError0();
+     MyResourceManager::LoadTexture("res/textures/bed.png", true, "bed");
+     glCheckError0();
+     MyResourceManager::LoadTexture("res/textures/table.png", true, "table");
      glCheckError0();
 
      glm::mat4 projection = glm::ortho(0.0f,
@@ -151,9 +139,13 @@ void FloorPlan::build() {
      MyResourceManager::GetShader("mainShader").setMat4("projection", projection);
      glCheckError0();
 
+     MyResourceManager::GetShader("spriteShader").use();
+     MyResourceManager::GetShader("spriteShader").setMat4("projection", projection);
+
      // set render specific controls
-     Shader shader = MyResourceManager::GetShader("mainShader");
-     renderer = new Renderer(shader);
+     Shader mainShader = MyResourceManager::GetShader("mainShader");
+     Shader spriteShader = MyResourceManager::GetShader("spriteShader");
+     renderer = new Renderer(mainShader, spriteShader);
      /**************/
 
 
@@ -195,9 +187,9 @@ void FloorPlan::build() {
 
 void FloorPlan::render()
 {
-	for (auto drawable : drawableObjects) {
-		drawable->draw(*renderer);
-	}
+     for (auto drawable : drawableObjects) {
+          drawable->draw(renderer);
+     }
 }
 
 void FloorPlan::processInput(float dt)

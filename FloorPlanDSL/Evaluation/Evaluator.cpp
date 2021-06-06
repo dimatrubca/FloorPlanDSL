@@ -2,6 +2,7 @@
 
 #include "../Objects/Object.h"
 #include "../Objects/Room.h"
+#include "../Objects/Bed.h"
 #include "Evaluator.h"
 #include "../Utils.h"
 
@@ -162,7 +163,6 @@ Object* Evaluator::evalStructureStatement(StructureStatementNode* structureNode)
 		params[propName] = propValue;
 	}
 
-
 	// test any
 	if (structureNode->structureType == ROOM) {
 		Room* room = new Room(params);
@@ -175,6 +175,12 @@ Object* Evaluator::evalStructureStatement(StructureStatementNode* structureNode)
 
 		env->set(wall->id, wall);
 		return wall;
+	}
+	else if (structureNode->structureType == BED) {
+		Bed* bed = new Bed(params);
+
+		env->set(bed->id, bed);
+		return bed;
 	}
 
 };

@@ -9,6 +9,7 @@ public:
 	// properties
 	std::vector<float> sizes;
 	std::vector<float> angles;
+	std::vector<Position> vertices;
 	//std::vector<Position> vertices;
 	Position startPosition;
 	//std::vector<Measure*> size;

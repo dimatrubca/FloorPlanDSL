@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include <string>
 #include <iostream>
 #include <sstream>
@@ -6,8 +7,8 @@
 
 #include "../Parsing/Error.h"
 #include "../Utils.h"
+#include "../Parsing/Token.h"
 
-#include <GL/glew.h>
 
 #define hexToInt(ch) (ch >= 'A' ? ch - 'A' + 10 : ch - '0')
 class Renderer;
@@ -149,6 +150,9 @@ struct Position {
 	float x;
 	float y;
 
+	bool operator==(const Position& other) const { return (abs(this->x - other.x) <= 0.001 && abs(this->y - other.y) <= 0.001); }
+	bool operator!=(const Position& other) const { return !(*this == other); }
+
 	std::string toString() { return "{" + std::to_string(x) + ", " + std::to_string(y) + "}"; };
 };
 
@@ -164,7 +168,7 @@ public:
 	void draw(Renderer& renderer);
 
 	void init() {
-		glGenVertexArrays(1, &this->VAO);
+		/*glGenVertexArrays(1, &this->VAO);
 		glGenBuffers(2, &this->VBO[0]);
 
 		glBindVertexArray(this->VAO);
@@ -186,7 +190,7 @@ public:
 		glEnableVertexAttribArray(1);
 
 		// unbind VAO
-		glBindVertexArray(0);
+		glBindVertexArray(0);*/
 	}
 
 protected:

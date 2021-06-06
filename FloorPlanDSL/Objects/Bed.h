@@ -11,5 +11,5 @@ public:
 	// properties
 	float width, height;
 	float rotation;
-	Position position; // bottom left corner
+	Position position; // top left corner
 };

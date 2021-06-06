@@ -5,7 +5,9 @@
 #include "../Utils.h"
 #include "../Objects/Wall.h"
 #include "../Objects/Door.h"
+#include "../Objects/Room.h"
 #include "../Objects/Window.h"
+#include "../Objects/Bed.h"
 
 class Enviroment {
 public:
@@ -15,15 +17,18 @@ public:
 	Object* get(std::string name);
 	bool exists(std::string name);
 	std::vector<DrawableObject*> getDrawableObjects();
-	std::vector<Wall*> getAllWalls();
 
 	int windowWidth = 600;
 	int windowHeight = 600;
-private:
-	std::map<std::string, Object*> store;
+
 	std::vector<Room*> rooms;
 	std::vector<Wall*> walls;
 	std::vector<Door*> doors;
 	std::vector<Window*> windows;
+	std::vector<Bed*> beds;
+	
+private:
+	std::map<std::string, Object*> store;
+
 };
 
