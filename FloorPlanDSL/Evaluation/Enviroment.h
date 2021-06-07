@@ -8,6 +8,8 @@
 #include "../Objects/Room.h"
 #include "../Objects/Window.h"
 #include "../Objects/Bed.h"
+#include "../Objects/Table.h"
+#include "../Objects/Chair.h"
 
 class Enviroment {
 public:
@@ -26,6 +28,10 @@ public:
 	std::vector<Door*> doors;
 	std::vector<Window*> windows;
 	std::vector<Bed*> beds;
+	std::vector<Table*> tables;
+	std::vector<Chair*> chairs;
+
+	
 	
 private:
 	std::map<std::string, Object*> store;

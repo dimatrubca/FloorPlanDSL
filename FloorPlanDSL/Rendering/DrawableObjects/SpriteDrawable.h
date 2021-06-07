@@ -4,7 +4,8 @@
 class SpriteDrawable : GlDrawableObject {
 public:
 	SpriteDrawable() {};
-	void draw(Renderer* renderer);
+	virtual void draw(Renderer* renderer);
+	virtual std::string getSpriteName() = 0;
 protected:
 	glm::vec3 color;
 	glm::vec2 position;

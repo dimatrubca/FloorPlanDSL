@@ -182,7 +182,30 @@ Object* Evaluator::evalStructureStatement(StructureStatementNode* structureNode)
 		env->set(bed->id, bed);
 		return bed;
 	}
+	else if (structureNode->structureType == DOOR) {
+		Door* door = new Door(params, env->rooms);
 
+		env->set(door->id, door);
+		return door;
+	}
+	else if (structureNode->structureType == WINDOW) {
+		Window* window = new Window(params, env->rooms);
+
+		env->set(window->id, window);
+		return window;
+	}
+	else if (structureNode->structureType == TABLE) {
+		Table* table = new Table(params);
+
+		env->set(table->id, table);
+		return table;
+	}
+	else if (structureNode->structureType == CHAIR) {
+		Chair* chair = new Chair(params);
+
+		env->set(chair->id, chair);
+		return chair;
+	}
 };
 
 std::pair<TokenType, Object*> Evaluator::evalPropertyNode(PropertyNode* propertyNode) {

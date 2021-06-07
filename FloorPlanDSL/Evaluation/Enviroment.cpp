@@ -40,6 +40,18 @@ void Enviroment::set(std::string name, Object* object) {
 	if (auto bed = dynamic_cast<Bed*>(object)) {
 		beds.push_back(bed);
 	}
+
+	if (auto window = dynamic_cast<Window*>(object)) {
+		windows.push_back(window);
+	}
+
+	if (auto table = dynamic_cast<Table*>(object)) {
+		tables.push_back(table);
+	}
+
+	if (auto chair = dynamic_cast<Chair*>(object)) {
+		chairs.push_back(chair);
+	}
 }
 
 void Enviroment::update(std::string name, Object* object) {

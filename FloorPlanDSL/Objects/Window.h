@@ -1,13 +1,14 @@
 #pragma once
 #include "Object.h"
+#include "Room.h"
 
-class Window : public Object {
+class Window : public DrawableObject {
 public:
-	Window(std::map<TokenType, Object*> params);
+	Window(std::map<TokenType, Object*> params, std::vector<Room*> rooms);
 	std::string toString() { return "Window"; };
 
 	//
 	int wall;
-	Measure startOnWall;
-	Measure End;
+	Position start, end;
+	float width;
 };

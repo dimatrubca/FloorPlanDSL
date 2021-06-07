@@ -2,6 +2,6 @@
 #include "../MyResourceManager.h"
 
 void SpriteDrawable::draw(Renderer* renderer) {
-	Texture2D texture = MyResourceManager::GetTexture("bed");
+	Texture2D texture = MyResourceManager::GetTexture(getSpriteName());
 	renderer->drawSprite(texture, position, size, rotate, color);
 };

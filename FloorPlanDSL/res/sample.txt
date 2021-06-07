@@ -21,13 +21,53 @@ float initialAngle = 90.0;
 Room( 
 	id: "room1", size: {150mm, 150mm, 150mm, 150mm},
 	angles: {initialAngle, 110.0,140.0, 110.0},
-	border:{10mm, #FF00FF},
+	border:{10mm, black},
 	position: {100mm, 150mm}
 );
 
 Bed(
 	id: "bed1", 
-	width: 50mm,
+	width: 40mm,
 	height: 50mm,
 	position: {150mm, 250mm}
+);
+
+Table(
+	id: "table1",
+	width: 30mm,
+	height: 30mm,
+	position: {300mm, 200mm}
+);
+
+Chair(
+	id: "chair1",
+	width: 15mm,
+	height: 15mm,
+	position: {250mm, 200mm},
+);
+
+
+Door(
+	id: "door1",
+	id_parent: "room1",
+	wall: 1,
+	start_on_wall: 40mm,
+	length: 40mm
+);
+
+Door(
+	id: "door1",
+	id_parent: "room1",
+	wall: 0,
+	start_on_wall: 40mm,
+	length: 30mm
+);
+
+
+Window(
+	id: "window1",
+	id_parent: "room1",
+	wall: 0,
+	start_on_wall:90mm,
+	length: 30mm
 );

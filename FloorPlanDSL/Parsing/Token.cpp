@@ -17,12 +17,13 @@ std::unordered_map<std::string, TokenType> keywords({
 	{"Table", TABLE},
 	{"Chair", CHAIR},
 	{"id", ID_PROP},
-	{"id_parent", IDPARENT_PROP},
+	{"id_parent", ID_PARENT_PROP},
 	{"size", SIZE_PROP},
 	{"angles", ANGLES_PROP},
 	{"border", BORDER_PROP},
 	{"position", POSITION_PROP},
-	{"start_on_wall", STARTONWAL_PROP},
+	{"start_on_wall", START_ON_WAL_PROP},
+	{"wall", WALL_PROP},
 	{"end_on_wall", ENDONWALL_PROP},
 	{"length", LENGTH_PROP},
 	{"direction", DIRECTION_PROP},
@@ -50,7 +51,7 @@ std::set<TokenType> structures({
 });
 
 std::set<TokenType> roomProps({
-	ID_PROP, SIZE_PROP, ANGLES_PROP, BORDER_PROP, POSITION_PROP, STARTONWAL_PROP, LAYER_PROP
+	ID_PROP, SIZE_PROP, ANGLES_PROP, BORDER_PROP, POSITION_PROP, START_ON_WAL_PROP, LAYER_PROP
 });	
 
 std::set<TokenType> measureUnits({

@@ -23,6 +23,7 @@ public:
      void drawDoor(Door* door);
      void draw(GLuint VAO, int count);
      void drawTriangleStrip(std::vector<float> &vertices, glm::vec3 color); 
+     void drawLineStrip(std::vector<float>& vertices, glm::vec3 color);
      void drawSprite(Texture2D &texture, glm::vec2 position, glm::vec2 size, float rotate, glm::vec3 color);
 
 private:

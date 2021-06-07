@@ -52,12 +52,14 @@ const TokenType TABLE = "TABLE";
 const TokenType CHAIR = "CHAIR";
 
 const TokenType ID_PROP = "ID_PROPERT";
-const TokenType IDPARENT_PROP = "ID_PARENT_PROPERTY";
+const TokenType ID_PARENT_PROP = "ID_PARENT_PROPERTY";
+const TokenType WALL_PROP = "WALL_PROPERTY";
+const TokenType END_ON_WALL = "END_ON_WALL_PROPERTY";
 const TokenType SIZE_PROP = "SIZE_PROPERTY";
 const TokenType ANGLES_PROP = "ANGLES_PROPERTY";
 const TokenType BORDER_PROP = "BORDER_PROPERTY";
 const TokenType POSITION_PROP = "POSITION";
-const TokenType STARTONWAL_PROP = "START_ON_WALL";
+const TokenType START_ON_WAL_PROP = "START_ON_WALL";
 const TokenType ENDONWALL_PROP = "END_ON_WALL";
 const TokenType LENGTH_PROP = "LENGTH";
 const TokenType DIRECTION_PROP = "DIRECTION";

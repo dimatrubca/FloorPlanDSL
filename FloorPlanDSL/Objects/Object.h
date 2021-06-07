@@ -24,6 +24,7 @@ const ObjectType COLOR_OBJ = "COLOR";
 const ObjectType ARRAY_OBJ = "ARRAY";
 const ObjectType ROOM_OBJ = "ROOM";
 const ObjectType WALL_OBJ = "WALL";
+const ObjectType WINDOW_OBJ = "WINDOW";
 const ObjectType DOOR_OBJ = "DOOR";
 const ObjectType Bed_OBJ = "BED";
 const ObjectType NULL_OBJ = "NULL";

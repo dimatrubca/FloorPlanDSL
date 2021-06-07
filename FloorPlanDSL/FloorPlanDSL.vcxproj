@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Objects\Bed.cpp" />
     <ClCompile Include="Objects\Door.cpp" />
+    <ClCompile Include="Objects\IndoorObject.cpp" />
     <ClCompile Include="Objects\Table.cpp" />
     <ClCompile Include="Objects\Wall.cpp" />
     <ClCompile Include="Objects\Window.cpp" />
@@ -30,8 +30,11 @@
     <ClCompile Include="Evaluation\Evaluator.cpp" />
     <ClCompile Include="Parsing\Error.h" />
     <ClCompile Include="Rendering\DrawableObjects\DrawableBed.cpp" />
+    <ClCompile Include="Rendering\DrawableObjects\DrawableDoor.cpp" />
+    <ClCompile Include="Rendering\DrawableObjects\DrawableIndoorObject.cpp" />
     <ClCompile Include="Rendering\DrawableObjects\DrawableRoom.cpp" />
     <ClCompile Include="Rendering\DrawableObjects\DrawableWall.cpp" />
+    <ClCompile Include="Rendering\DrawableObjects\DrawableWindow.cpp" />
     <ClCompile Include="Rendering\FloorPlan.cpp" />
     <ClCompile Include="Parsing\Lexer.cpp" />
     <ClCompile Include="Parsing\LexerError.cpp" />
@@ -55,7 +58,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Objects\Bed.h" />
+    <ClInclude Include="Objects\Chair.h" />
     <ClInclude Include="Objects\Door.h" />
+    <ClInclude Include="Objects\IndoorObject.h" />
     <ClInclude Include="Objects\Table.h" />
     <ClInclude Include="Objects\Wall.h" />
     <ClInclude Include="Objects\Window.h" />
@@ -63,8 +68,13 @@
     <ClInclude Include="Evaluation\Enviroment.h" />
     <ClInclude Include="Evaluation\Evaluator.h" />
     <ClInclude Include="Rendering\DrawableObjects\DrawableBed.h" />
+    <ClInclude Include="Rendering\DrawableObjects\DrawableChair.h" />
+    <ClInclude Include="Rendering\DrawableObjects\DrawableDoor.h" />
+    <ClInclude Include="Rendering\DrawableObjects\DrawableIndoorObject.h" />
+    <ClInclude Include="Rendering\DrawableObjects\DrawableTable.h" />
     <ClInclude Include="Rendering\DrawableObjects\DrawableUtils.h" />
     <ClInclude Include="Rendering\DrawableObjects\DrawableWall.h" />
+    <ClInclude Include="Rendering\DrawableObjects\DrawableWindow.h" />
     <ClInclude Include="Rendering\DrawableObjects\GlDrawableObject.h" />
     <ClInclude Include="Rendering\DrawableObjects\DrawableRoom.h" />
     <ClInclude Include="Rendering\FloorPlan.h" />
@@ -93,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\bed.png" />
+    <Image Include="res\textures\chair.png" />
     <Image Include="res\textures\table.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

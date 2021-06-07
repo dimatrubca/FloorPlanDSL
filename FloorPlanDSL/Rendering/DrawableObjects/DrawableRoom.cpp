@@ -25,7 +25,7 @@ DrawableRoom::DrawableRoom(Room* room) : room(room) {
 		auto currVertex = points[i];
 		auto nextVertex = points[i + 1];
 
-		float angle = atan2(nextVertex.y - currVertex.y, nextVertex.x - currVertex.y);
+		float angle = atan2(nextVertex.y - currVertex.y, nextVertex.x - currVertex.x);
 		
 		Position currAdjacent = getAdjacentPos(currVertex, width, angle);
 		Position nextAdjacent = getAdjacentPos(nextVertex, width, angle);
@@ -53,8 +53,8 @@ DrawableRoom::DrawableRoom(Room* room) : room(room) {
 		vertices.push_back(points[i].y);
 		vertices.push_back(0);
 
-		vertices.push_back(borderPoints[i].x);
-		vertices.push_back(borderPoints[i].y);
+		vertices.push_back(adjBorderPoints[i].x);
+		vertices.push_back(adjBorderPoints[i].y);
 		vertices.push_back(0);
 
 		vertices.push_back(points[i + 1].x);
@@ -62,10 +62,10 @@ DrawableRoom::DrawableRoom(Room* room) : room(room) {
 		vertices.push_back(0);
 
 
-		vertices.push_back(borderPoints[i + 1].x);
-		vertices.push_back(borderPoints[i + 1].y);
+		vertices.push_back(adjBorderPoints[i + 1].x);
+		vertices.push_back(adjBorderPoints[i + 1].y);
 		vertices.push_back(0);
 	}
 
-	this->color = glm::vec3(200, 2, 2);
+	this->color = glm::vec3(room->border->color->rgb[0], room->border->color->rgb[1], room->border->color->rgb[2]);
 }

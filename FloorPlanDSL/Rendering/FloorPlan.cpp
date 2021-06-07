@@ -25,6 +25,13 @@
 #include "DrawableObjects/DrawableWall.h"
 #include "DrawableObjects/DrawableRoom.h"
 #include "DrawableObjects/DrawableBed.h"
+#include "DrawableObjects/DrawableDoor.h"
+#include "DrawableObjects/DrawableWindow.h"
+#include "DrawableObjects/DrawableChair.h"
+
+#include <chrono>
+#include <thread>
+#include "DrawableObjects/DrawableTable.h"
 
 Renderer* renderer;
 
@@ -83,6 +90,26 @@ void FloorPlan::init() {
                DrawableBed* drawableBed = new DrawableBed(bed);
                this->drawableObjects.push_back((GlDrawableObject*)drawableBed);
           }
+
+          for (auto door : evaluator.env->doors) {
+               DrawableDoor* drawableDoor = new DrawableDoor(door);
+               this->drawableObjects.push_back((GlDrawableObject*)drawableDoor);
+          }
+
+          for (auto window : evaluator.env->windows) {
+               DrawableWindow* drawableWindow = new DrawableWindow(window);
+               this->drawableObjects.push_back((GlDrawableObject*)drawableWindow);
+          }
+
+          for (auto chair : evaluator.env->chairs) {
+               DrawableChair* drawableChair = new DrawableChair(chair);
+               this->drawableObjects.push_back((GlDrawableObject*)drawableChair);
+          }
+
+          for (auto table : evaluator.env->tables) {
+               DrawableTable* drawableTable = new DrawableTable(table);
+               this->drawableObjects.push_back((GlDrawableObject*)drawableTable);
+          }
      }
 }
 
@@ -128,6 +155,8 @@ void FloorPlan::build() {
      MyResourceManager::LoadTexture("res/textures/bed.png", true, "bed");
      glCheckError0();
      MyResourceManager::LoadTexture("res/textures/table.png", true, "table");
+     glCheckError0();
+     MyResourceManager::LoadTexture("res/textures/chair.png", true, "chair");
      glCheckError0();
 
      glm::mat4 projection = glm::ortho(0.0f,
@@ -181,6 +210,8 @@ void FloorPlan::build() {
           glfwSwapBuffers(window);
           glfwPollEvents();
           //glCheckError();
+
+          std::this_thread::sleep_for(std::chrono::milliseconds(3000));
      }
 
 }

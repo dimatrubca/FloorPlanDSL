@@ -1,5 +1,6 @@
 #pragma once
 #include "Object.h"
+#include "Room.h"
 
 class Door : public DrawableObject {
 public:

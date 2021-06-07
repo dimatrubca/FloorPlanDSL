@@ -113,6 +113,36 @@ void Renderer::drawTriangleStrip(std::vector<float> &vertices, glm::vec3 color) 
 	glCheckError0();
 }
 
+void Renderer::drawLineStrip(std::vector<float>& vertices, glm::vec3 color) {
+	this->mainShader.use();
+	
+	unsigned int VBO;
+
+	glGenBuffers(1, &VBO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
+	glCheckError0();
+
+	glBindVertexArray(this->VAO);
+	glCheckError0();
+	glEnableVertexAttribArray(0);
+	glCheckError0();
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glCheckError0();
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+
+	this->mainShader.setVector3f("u_color", color);
+	glCheckError0();
+
+	glBindVertexArray(this->VAO);
+	glDrawArrays(GL_LINE_STRIP, 0, vertices.size() / 3);
+	glBindVertexArray(0);
+	glCheckError0();
+}
+
 void Renderer::drawSprite(Texture2D& texture, glm::vec2 position, glm::vec2 size, float rotate, glm::vec3 color) {
 	this->spriteShader.use();
 	glm::mat4 model = glm::mat4(1.0f);

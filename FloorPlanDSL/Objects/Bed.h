@@ -1,15 +1,10 @@
 #pragma once
-#include "Object.h"
+#include "IndoorObject.h"
 
-class Bed : public DrawableObject {
+class Bed : public IndoorObject {
 public:
-	Bed(std::map<TokenType, Object*> params);
+	Bed(std::map<TokenType, Object*> params) : IndoorObject(params) {};
 	std::string toString() {
 		return "Bed";
 	};
-
-	// properties
-	float width, height;
-	float rotation;
-	Position position; // top left corner
 };
