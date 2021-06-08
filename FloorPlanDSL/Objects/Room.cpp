@@ -58,6 +58,12 @@ Room::Room(std::map<TokenType, Object*> params) : DrawableObject(ROOM_OBJ, param
 		startPosition = Position(x, y);
 	}
 
+	if (hasKey(params, LABEL_PROP)) {
+		String* labelProp = dynamic_cast<String*>(params[LABEL_PROP]);
+		Error::Assert(labelProp != nullptr, "Invalid label property value");
+		this->label = labelProp->value;
+	}
+
 	
 	vertices.push_back(startPosition);
 

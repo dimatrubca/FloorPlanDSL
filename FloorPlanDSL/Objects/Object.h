@@ -151,7 +151,7 @@ struct Position {
 	float x;
 	float y;
 
-	bool operator==(const Position& other) const { return (abs(this->x - other.x) <= 0.001 && abs(this->y - other.y) <= 0.001); }
+	bool operator==(const Position& other) const { return (abs(this->x - other.x) <= 0.01 && abs(this->y - other.y) <= 0.01); }
 	bool operator!=(const Position& other) const { return !(*this == other); }
 
 	std::string toString() { return "{" + std::to_string(x) + ", " + std::to_string(y) + "}"; };

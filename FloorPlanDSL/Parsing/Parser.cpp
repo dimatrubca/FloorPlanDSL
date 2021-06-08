@@ -64,25 +64,25 @@ HeaderStatementNode* Parser::parseHeader() {
 	HeaderStatementNode* header = new HeaderStatementNode(currToken);
 
 	// TODO: check errors
-	if (peekToken.type != INT_LITERAL) {
+	if (peekToken.type != FLOAT_LITERAL) {
 		return nullptr;
 	}
 
 	advance();
 
-	header->width = stoi(currToken.literal);
+	header->width = stoi(currToken.literal) * 1000;
 
 	if (peekToken.literal != "x") {
 		return nullptr;
 	}
 	advance();
 
-	if (peekToken.type != INT_LITERAL) {
+	if (peekToken.type != FLOAT_LITERAL) {
 		return nullptr;
 	}
 	advance();
 
-	header->height = stoi(currToken.literal);
+	header->height = stoi(currToken.literal) * 1000;
 
 	return header;
 }

@@ -123,6 +123,9 @@
     <ClCompile Include="Rendering\DrawableObjects\DrawableIndoorObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Rendering\TextRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Objects\Room.h">
@@ -227,6 +230,9 @@
     <ClInclude Include="Rendering\DrawableObjects\DrawableChair.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Rendering\TextRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="res\sample.txt" />
@@ -236,6 +242,8 @@
     <None Include="res\shaders\vertex.shader" />
     <None Include="res\shaders\spriteVertex.shader" />
     <None Include="res\shaders\spriteFragment.shader" />
+    <None Include="res\shaders\textVertex.shader" />
+    <None Include="res\shaders\textFragment.shader" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\bed.png">
@@ -247,5 +255,8 @@
     <Image Include="res\textures\chair.png">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="res\fonts\arial.ttf" />
   </ItemGroup>
 </Project>

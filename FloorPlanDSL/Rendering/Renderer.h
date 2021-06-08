@@ -19,12 +19,12 @@ public:
      ~Renderer();
 
      void draw(GLuint VAO, int count);
-     void drawTriangleStrip(std::vector<float> &vertices, glm::vec3 color); 
-     void drawLineStrip(std::vector<float>& vertices, glm::vec3 color);
+     void drawTriangleStrip(std::vector<float> vertices, glm::vec3 color); 
+     void drawLineStrip(std::vector<float> vertices, glm::vec3 color);
      void drawSprite(Texture2D &texture, glm::vec2 position, glm::vec2 size, float rotate, glm::vec3 color);
 
      void setWindowDimensions(int requestedWidth, int requestedHeight, int& width, int& height);
-
+     float unitsPerPixel = 1;
 private:
      Shader mainShader;
      Shader spriteShader;
@@ -35,7 +35,6 @@ private:
      void normalizeVertices(std::vector<float>& vertices);
      void normalizeVertices(glm::vec2& position);
 
-     float unitsPerPixel = 1;
      int maxWindowWidth = 500;
      int maxWindowHeight = 500;
 };

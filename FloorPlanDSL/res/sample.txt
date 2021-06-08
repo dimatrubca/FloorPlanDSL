@@ -1,70 +1,239 @@
-! 5000 x 500
+! 65.0 x 50.0
 
 
-float initialAngle = 45.0;
+float initialAngle = 90.0;
+
 
 
 Room( 
-	id: "room1", size: {150mm, 150mm, 150mm, 150mm},
-	angles: {initialAngle, 110.0,140.0, 110.0},
-	border:{10mm, black},
-	position: {100mm, 150mm}
+	id: "kitchen", 
+	size: {20m, 10m, 20m, 10m},
+	angles: {initialAngle, 90.0, 90.0, 90.0},
+	border:{30cm, black},
+	position: {5m, 5m},
+	label: "kitchen"
 );
 
-Bed(
-	id: "bed1", 
-	width: 40mm,
-	height: 50mm,
-	position: {150mm, 250mm},
-	rotation: 0
+Room(
+	id: "livingRoom",
+	size: {40m, 25m, 40m, 24m},
+	angles: {initialAngle, 90.0, 90.0, 90.0},
+	border: {30cm, black},
+	position: {15m + 30cm, 5m},
+	label: "Living Room"
+);
+
+Room(
+	id: "bathroom",
+	size: {15m, 20m, 15m, 20m},
+	angles: {initialAngle, 90.0, 90.0, 90.0},
+	border: {30cm, black},
+	position: {40m + 60cm, 5m},
+	label: "Bathroom"
+);
+
+Room(
+	id: "guestRoom",
+	size: {20m, 20m, 5m, 10.6m, 5m},
+	angles: {initialAngle, 90.0, 110.0, 160.0, 160.0},
+	border: {30cm, black},
+	position: {40m + 60cm, 20m + 30cm},
+	label: "Guest Room"
+);
+
+
+
+Window(
+	id: "window1",
+	id_parent: "kitchen",
+	wall: 0,
+	start_on_wall: 4m,
+	length: 2m,
+);
+
+
+Window(
+	id: "window3",
+	id_parent: "bathroom",
+	wall: 2,
+	start_on_wall: 7m,
+	length: 3.5m,
+);
+
+Window(
+	id: "window4",
+	id_parent: "guestRoom",
+	wall: 1,
+	start_on_wall: 5m,
+	length: 3.5m,
+);
+
+Window(
+	id: "window5",
+	id_parent: "guestRoom",
+	wall: 1,
+	start_on_wall: 14m,
+	length: 3.5m,
+);
+
+Door(
+	id: "door0",
+	id_parent: "kitchen",
+	wall: 2,
+	start_on_wall: 10m,
+	length: 3m,
+);
+
+Door(
+	id: "door1",
+	id_parent: "livingRoom",
+	wall: 3,
+	start_on_wall: 15m,
+	length: 3m,
+);
+
+Door(
+	id: "door2",
+	id_parent: "bathroom",
+	wall: 0,
+	start_on_wall: 4m,
+	length: 2.5m,
+);
+
+
+Door(
+	id: "door3",
+	id_parent: "guestRoom",
+	wall: 0,
+	start_on_wall: 6m,
+	length: 2.5m,
 );
 
 Bed(
 	id: "bed2",
-	width: 30mm,
-	height: 40mm,
-	id_parent: "room1",
-	wall: 0,
-	start_on_wall: 20mm,
-	distance_wall: 30mm,
+	width: 4m,
+	height: 4m,
+	id_parent: "livingRoom",
+	wall: 2,
+	start_on_wall: 10m,
+	distance_wall: 5m,
+	rotation: 90,
 );
+
+
+Bed(
+	id: "bed30",
+	width: 3m,
+	height: 3m,
+	id_parent: "guestRoom",
+	wall: 1,
+	start_on_wall: 16m,
+	distance_wall: 6m,
+	rotation: 90,
+);
+
+Table(
+	id: "table1",
+	width: 2m,
+	height: 2m,
+	id_parent: "livingRoom",
+	wall: 2,
+	start_on_wall: 7m,
+	distance_wall: 2.5m,
+);
+
+Table(
+	id: "table2",
+	width: 3m,
+	height: 3m,
+	id_parent: "kitchen",
+	wall: 1,
+	start_on_wall: 3m,
+	distance_wall: 4m,
+);
+
+Chair(
+	id: "chair1",
+	width: 1.2m,
+	height: 1.2m,
+	id_parent: "kitchen",
+	wall: 1,
+	start_on_wall: 1.4m,
+	distance_wall: 5m
+);
+
+Chair(
+	id: "chair2",
+	width: 1.2m,
+	height: 1.2m,
+	id_parent: "kitchen",
+	wall: 1,
+	start_on_wall: 4m,
+	distance_wall: 2.2m
+);
+
+
+Chair(
+	id: "chair3",
+	width: 1.2m,
+	height: 1.2m,
+	id_parent: "kitchen",
+	wall: 1,
+	start_on_wall: 6.5m,
+	distance_wall: 4.5m
+);
+
+
+Chair(
+	id: "chair4",
+	width: 1.2m,
+	height: 1.2m,
+	id_parent: "kitchen",
+	wall: 1,
+	start_on_wall: 4m,
+	distance_wall: 8m,
+);
+
+
+Bed(
+	id: "bed1", 
+	width: 4m,
+	height: 4m,
+	position: {20m, 20m},
+	rotation: 90
+);
+
 
 Table(
 	id: "table5",
 	width: 40mm,
 	height: 40mm,
-	id_parent: "room1",
+	id_parent: "kitchen",
 	wall: 2,
 	start_on_wall: 30mm,
 	distance_wall: 30mm,
 );
 
 Table(
-	id: "table1",
+	id: "kitchen",
 	width: 30mm,
 	height: 30mm,
 	position: {300mm, 200mm}
 );
 
 Chair(
-	id: "chair1",
+	id: "kitchen",
 	width: 15mm,
 	height: 15mm,
 	position: {250mm, 200mm},
 );
 
 
-Door(
-	id: "door1",
-	id_parent: "room1",
-	wall: 1,
-	start_on_wall: 40mm,
-	length: 40mm
-);
+
 
 Door(
 	id: "door1",
-	id_parent: "room1",
+	id_parent: "kitchen",
 	wall: 0,
 	start_on_wall: 40mm,
 	length: 30mm
@@ -73,8 +242,8 @@ Door(
 
 Window(
 	id: "window1",
-	id_parent: "room1",
+	id_parent: "kitchen",
 	wall: 0,
 	start_on_wall:90mm,
-	length: 30mm
+	length: 10cm,
 );

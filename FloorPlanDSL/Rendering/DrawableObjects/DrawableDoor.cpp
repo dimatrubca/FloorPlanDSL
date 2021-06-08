@@ -39,7 +39,7 @@ DrawableDoor::DrawableDoor(Door* door) : door(door) {
 
 
 	auto initialAngle = angle + M_PI / 2 + M_PI/8;
-	auto lastAngle = angle + M_PI + M_PI/16;
+	auto lastAngle = angle + M_PI + M_PI / 32;
 	auto step = (lastAngle - initialAngle) / 15.0;
 
 
@@ -57,7 +57,7 @@ DrawableDoor::DrawableDoor(Door* door) : door(door) {
 
 }
 
-void DrawableDoor::draw(Renderer* renderer) {
+void DrawableDoor::draw(Renderer* renderer, TextRenderer* textRenderer) {
 	renderer->drawTriangleStrip(vertices, color);
 	renderer->drawLineStrip(lineVertices, glm::vec3(0.0, 0.0, 0.0));
 }

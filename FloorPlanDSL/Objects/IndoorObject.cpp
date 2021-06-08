@@ -79,8 +79,11 @@ IndoorObject::IndoorObject(std::map<TokenType, Object*> params, std::vector<Room
 
 
 		this->position = getAdjacentPos(Position(startOnWallX, startOnWallY), distanceWall->value, angle);
-			this->rotation = (angle - M_PI / 2) * 180 / M_PI; 
-			std::cout << "";
+
+		Integer* rotation = dynamic_cast<Integer*>(params[ROTATION_PROP]);
+		float rotationValue = (rotation ? rotation->value : 0);
+		this->rotation = (angle - M_PI / 2) * 180 / M_PI + rotationValue; 
+		std::cout << "";
 		//this->start = Position();
 		//this->end = Position(wallStart.x + (startOnWall->value + length->value) * cos(angle), wallStart.y + (startOnWall->value + length->value) * sin(angle));
 		//this->width = parentRoom->border->width->value;

@@ -1,4 +1,7 @@
 #pragma once
+#ifndef _DRAWABLEUTILS_
+#define _DRAWABLEUTILS_
+
 #include "../../Objects/Object.h"
 #include <corecrt_math_defines.h>
 
@@ -33,3 +36,9 @@ static Position getSegmentIntersection(Position a, Position b, Position c, Posit
 	Position pos(x, y);
 	return pos;
 }
+
+static float determinant(Position A, Position B, Position C) {
+	return (A.x * B.y + B.x * C.y + C.x * A.y - B.y * C.x - C.y * A.x - A.y * B.x);
+}
+
+#endif

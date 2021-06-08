@@ -32,17 +32,18 @@
 #include <chrono>
 #include <thread>
 #include "DrawableObjects/DrawableTable.h"
+#include "TextRenderer.h"
 
 Renderer* renderer;
+TextRenderer* textRenderer;
 
 FloorPlan::FloorPlan(std::string sourceCodePath) : sourceCodePath(sourceCodePath) {};
 
 
 FloorPlan::~FloorPlan()
 {
-	//delete renderer;
+	//destroy renderer;
 }
-
 
 
 void FloorPlan::init() {
@@ -113,6 +114,8 @@ void FloorPlan::init() {
      }
 
      setDimensions();
+
+
 }
 
 //TODO: rename to render
@@ -148,6 +151,12 @@ void FloorPlan::build() {
 
      //glCheckError();
 
+     textRenderer = new TextRenderer(this->width, this->height);
+     textRenderer->Load("res/fonts/arial.ttf", 12);
+     textRenderer->unitsPerPixel = this->unitsPerPixel;
+     textRenderer->width = this->width;
+     textRenderer->height = this->height;
+
      // draw all
      glCheckError0();
      MyResourceManager::LoadShader("res/shaders/vertex.shader", "res/shaders/fragment.shader", "mainShader");
@@ -177,6 +186,7 @@ void FloorPlan::build() {
      Shader mainShader = MyResourceManager::GetShader("mainShader");
      Shader spriteShader = MyResourceManager::GetShader("spriteShader");
      renderer = new Renderer(mainShader, spriteShader);
+     renderer->unitsPerPixel = this->unitsPerPixel;
      /**************/
 
 
@@ -184,6 +194,8 @@ void FloorPlan::build() {
      float deltaTime = 0.0f;
      float lastFrame = 0.0f;
      //glCheckError();
+     glEnable(GL_BLEND);
+     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
      while (!glfwWindowShouldClose(window))
      {
           // calculate delta time
@@ -221,8 +233,9 @@ void FloorPlan::build() {
 void FloorPlan::render()
 {
      for (auto drawable : drawableObjects) {
-          drawable->draw(renderer);
+          drawable->draw(renderer, textRenderer);
      }
+     textRenderer->RenderText("Lives:", 5.0f, 5.0f, 1.0f);
 }
 
 void FloorPlan::processInput(float dt)
@@ -237,18 +250,18 @@ void FloorPlan::setDimensions() {
      if (widthUnits <= maxWidthPixels && heightUnits <= maxHeightPixels) {
           width = widthUnits;
           height = heightUnits;
-          unitsPerPixel = 1;
+          unitsPerPixel = widthUnits / width;
      }
 
      if (heightUnits * 1.0 / widthUnits * maxWidthPixels <= maxHeightPixels) {
           width = maxWidthPixels;
-          height = heightUnits * 1.0 / widthUnits * widthUnits;
-          unitsPerPixel = widthUnits / widthUnits;
+          height = heightUnits * 1.0 / widthUnits * width;
+          unitsPerPixel = widthUnits / width;
      }
      else {
           height = maxHeightPixels;
-          width = widthUnits * 1.0 / heightUnits * heightUnits;
-          unitsPerPixel = heightUnits / heightUnits;
+          width = widthUnits * 1.0 / heightUnits * height;
+          unitsPerPixel = heightUnits / height;
      }
 
 };

@@ -7,7 +7,7 @@
 class TriangleStripDrawable : GlDrawableObject {
 public:
 	TriangleStripDrawable() {};
-	void draw(Renderer* renderer);
+	void draw(Renderer* renderer, TextRenderer* textRenderer);
 protected:
 	std::vector<float> vertices;
 	glm::vec3 color;

@@ -46,7 +46,7 @@ DrawableWindow::DrawableWindow(Window* window) : window(window) {
 
 }
 
-void DrawableWindow::draw(Renderer* renderer) {
+void DrawableWindow::draw(Renderer* renderer, TextRenderer* textRenderer) {
 	renderer->drawTriangleStrip(vertices, color);
 	renderer->drawLineStrip(lineVertices, glm::vec3(157, 193, 255));
 }

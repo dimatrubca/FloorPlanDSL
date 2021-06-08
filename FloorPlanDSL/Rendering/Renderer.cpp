@@ -82,7 +82,7 @@ void Renderer::drawWall(Wall* wall) {
 	drawTriangleStrip(vertices, color);
 }*/
 
-void Renderer::drawTriangleStrip(std::vector<float> &vertices, glm::vec3 color) {
+void Renderer::drawTriangleStrip(std::vector<float> vertices, glm::vec3 color) {
 	normalizeVertices(vertices);
 	this->mainShader.use();
 	glCheckError0();
@@ -114,7 +114,7 @@ void Renderer::drawTriangleStrip(std::vector<float> &vertices, glm::vec3 color) 
 	glCheckError0();
 }
 
-void Renderer::drawLineStrip(std::vector<float>& vertices, glm::vec3 color) {
+void Renderer::drawLineStrip(std::vector<float> vertices, glm::vec3 color) {
 	normalizeVertices(vertices);
 	this->mainShader.use();
 	

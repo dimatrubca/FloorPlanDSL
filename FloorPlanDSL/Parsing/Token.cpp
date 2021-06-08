@@ -33,6 +33,7 @@ std::unordered_map<std::string, TokenType> keywords({
 	{"height", HEIGHT_PROP},
 	{"distance_wall", DISTANCE_WALL_PROP},
 	{"rotation", ROTATION_PROP},
+	{"label", LABEL_PROP},
 	{"layer", LAYER_PROP},
 	{"hidden", HIDDEN_PROP_VALUE},
 	{"visible", VISIBILITY_PROP_VALUE},

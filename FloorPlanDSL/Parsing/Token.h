@@ -70,6 +70,7 @@ const TokenType HEIGHT_PROP = "HEIGHT";
 const TokenType DISTANCE_WALL_PROP = "DISTANCE_WALL";
 const TokenType LAYER_PROP = "LAYER";
 const TokenType ROTATION_PROP = "ROTATION";
+const TokenType LABEL_PROP = "LABEL";
 
 const TokenType VISIBILITY_PROP_VALUE = "VISIBILITY";
 const TokenType HIDDEN_PROP_VALUE = "HIDDEN";

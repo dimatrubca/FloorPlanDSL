@@ -5,7 +5,7 @@
 class DrawableDoor : public TriangleStripDrawable {
 public:
 	DrawableDoor(Door* door);
-	virtual void draw(Renderer* renderer);
+	virtual void draw(Renderer* renderer, TextRenderer* textRenderer);
 private:
 	Door* door;
 	std::vector<float> lineVertices;

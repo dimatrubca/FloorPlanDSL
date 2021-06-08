@@ -2,6 +2,7 @@
 #include "DrawableRoom.h"
 #include "DrawableUtils.h"
 #include <glm/vec3.hpp> // glm::vec3
+#include <iomanip>      // std::setprecision
 
 DrawableRoom::DrawableRoom(Room* room) : room(room) {
 	Position currPos = room->startPosition;
@@ -68,4 +69,43 @@ DrawableRoom::DrawableRoom(Room* room) : room(room) {
 	}
 
 	this->color = glm::vec3(room->border->color->rgb[0], room->border->color->rgb[1], room->border->color->rgb[2]);
+	this->center = findCenter();
+	this->area = calculateArea();
 }
+
+Position DrawableRoom::findCenter() {
+	float sumX = 0, sumY = 0;
+	int cntVertices = room->vertices.size();
+
+	for (auto vertex : room->vertices) {
+		sumX += vertex.x;
+		sumY += vertex.y;
+	}
+
+	return Position(sumX / cntVertices, sumY / cntVertices);
+};
+
+float DrawableRoom::calculateArea() {
+	float area = 0;
+	Position origin = Position(0.0, 0.0);
+	for (int i = 0; i + 1 < room->vertices.size(); i++) {
+		area += determinant(origin, room->vertices[i], room->vertices[i+1]);
+	}
+
+	area = 0.5 * abs(area);
+
+	// convert to m^2
+	area = area / 1000000.0;
+
+	return area;
+}
+
+void DrawableRoom::draw(Renderer* renderer, TextRenderer* textRenderer) {
+	renderer->drawTriangleStrip(vertices, color);
+
+	if (room->label != "") {
+		std::stringstream ss; ss << " (" << std::fixed << std::setprecision(2) << this->area << " m^2)";
+		textRenderer->RenderText(room->label + ss.str(), center.x - 10, center.y +10, 1);
+	}
+}
+

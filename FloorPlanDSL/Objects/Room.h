@@ -7,13 +7,11 @@ public:
 	std::string toString();
 
 	// properties
+	std::string label;
 	std::vector<float> sizes;
 	std::vector<float> angles;
 	std::vector<Position> vertices;
-	//std::vector<Position> vertices;
 	Position startPosition;
-	//std::vector<Measure*> size;
-	//std::vector<FloatObject*> angles;
 	Border* border;
 
 	void setVertices();
