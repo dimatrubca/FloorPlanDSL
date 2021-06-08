@@ -23,8 +23,8 @@ Position DrawableObject::getAdjacentPos(Position pos, float width, float alpha) 
 
 	float beta = M_PI / 2 - alpha;
 
-	adjacentPos.x = pos.x - cos(beta) * width;
-	adjacentPos.y = pos.y + sin(beta) * width;
+	adjacentPos.x = pos.x + cos(beta) * width;
+	adjacentPos.y = pos.y - sin(beta) * width;
 
 	return adjacentPos;
 }

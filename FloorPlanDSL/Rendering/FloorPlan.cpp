@@ -65,10 +65,10 @@ void FloorPlan::init() {
      Evaluator evaluator(new Enviroment());
 
      Object* evalResult = evaluator.eval(program);
-     this->width = evaluator.env->windowWidth;
-     this->height = evaluator.env->windowHeight;
+     this->widthUnits = evaluator.env->windowWidth;
+     this->heightUnits = evaluator.env->windowHeight;
 
-     std::cout << width << " x " << height << '\n';
+     std::cout << widthUnits << " x " << heightUnits << '\n';
 
      if (evalResult) {
           std::cout << evalResult->toString();
@@ -111,6 +111,8 @@ void FloorPlan::init() {
                this->drawableObjects.push_back((GlDrawableObject*)drawableTable);
           }
      }
+
+     setDimensions();
 }
 
 //TODO: rename to render
@@ -230,3 +232,23 @@ void FloorPlan::processInput(float dt)
 void FloorPlan::update(float dt)
 {
 }
+
+void FloorPlan::setDimensions() {
+     if (widthUnits <= maxWidthPixels && heightUnits <= maxHeightPixels) {
+          width = widthUnits;
+          height = heightUnits;
+          unitsPerPixel = 1;
+     }
+
+     if (heightUnits * 1.0 / widthUnits * maxWidthPixels <= maxHeightPixels) {
+          width = maxWidthPixels;
+          height = heightUnits * 1.0 / widthUnits * widthUnits;
+          unitsPerPixel = widthUnits / widthUnits;
+     }
+     else {
+          height = maxHeightPixels;
+          width = widthUnits * 1.0 / heightUnits * heightUnits;
+          unitsPerPixel = heightUnits / heightUnits;
+     }
+
+};

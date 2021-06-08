@@ -67,8 +67,9 @@ const TokenType START_PROPERTY = "START";
 const TokenType END_PROP = "END";
 const TokenType WIDTH_PROP = "WIDTH";
 const TokenType HEIGHT_PROP = "HEIGHT";
-const TokenType DISTANCEWALL_PROP = "DISTANCE_WALL";
+const TokenType DISTANCE_WALL_PROP = "DISTANCE_WALL";
 const TokenType LAYER_PROP = "LAYER";
+const TokenType ROTATION_PROP = "ROTATION";
 
 const TokenType VISIBILITY_PROP_VALUE = "VISIBILITY";
 const TokenType HIDDEN_PROP_VALUE = "HIDDEN";

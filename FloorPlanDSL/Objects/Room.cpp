@@ -58,6 +58,7 @@ Room::Room(std::map<TokenType, Object*> params) : DrawableObject(ROOM_OBJ, param
 		startPosition = Position(x, y);
 	}
 
+	
 	vertices.push_back(startPosition);
 
 	float prevAngle = 0;

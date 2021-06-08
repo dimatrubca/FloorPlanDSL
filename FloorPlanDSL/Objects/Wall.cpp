@@ -63,6 +63,8 @@ Wall::Wall(std::map<TokenType, Object*> params) : DrawableObject(WALL_OBJ, param
 		end = Position(x, y);
 	}
 
+
+
 	if (hasKey(params, BORDER_PROP)) {
 		Array* borderArray = dynamic_cast<Array*>(params[BORDER_PROP]);
 		Measure* width = dynamic_cast<Measure*>(borderArray->elements[0]);

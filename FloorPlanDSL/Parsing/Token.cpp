@@ -31,7 +31,8 @@ std::unordered_map<std::string, TokenType> keywords({
 	{"end", END_PROP},
 	{"width", WIDTH_PROP},
 	{"height", HEIGHT_PROP},
-	{"distance_wall", DISTANCEWALL_PROP},
+	{"distance_wall", DISTANCE_WALL_PROP},
+	{"rotation", ROTATION_PROP},
 	{"layer", LAYER_PROP},
 	{"hidden", HIDDEN_PROP_VALUE},
 	{"visible", VISIBILITY_PROP_VALUE},
@@ -39,7 +40,7 @@ std::unordered_map<std::string, TokenType> keywords({
 	{"cm", MEASURE_UNIT_CM},
 	{"dm", MEASURE_UNIT_DM},
 	{"m", MEASURE_UNIT_M},
-	{"km", MEASURE_UNIT_KM}
+	{"km", MEASURE_UNIT_KM},
 });
 
 std::set<TokenType> dataTypes({

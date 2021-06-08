@@ -83,6 +83,7 @@ void Renderer::drawWall(Wall* wall) {
 }*/
 
 void Renderer::drawTriangleStrip(std::vector<float> &vertices, glm::vec3 color) {
+	normalizeVertices(vertices);
 	this->mainShader.use();
 	glCheckError0();
 
@@ -114,6 +115,7 @@ void Renderer::drawTriangleStrip(std::vector<float> &vertices, glm::vec3 color) 
 }
 
 void Renderer::drawLineStrip(std::vector<float>& vertices, glm::vec3 color) {
+	normalizeVertices(vertices);
 	this->mainShader.use();
 	
 	unsigned int VBO;
@@ -144,13 +146,16 @@ void Renderer::drawLineStrip(std::vector<float>& vertices, glm::vec3 color) {
 }
 
 void Renderer::drawSprite(Texture2D& texture, glm::vec2 position, glm::vec2 size, float rotate, glm::vec3 color) {
+	normalizeVertices(position);
+	normalizeVertices(size);
+
 	this->spriteShader.use();
 	glm::mat4 model = glm::mat4(1.0f);
 	model = glm::translate(model, glm::vec3(position, 0.0f));
 
-	model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f));
+	//model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f));
 	model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 0.0f, 1.0f));
-	model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f));
+	//model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f));
 
 	model = glm::scale(model, glm::vec3(size, 1.0f));
 
@@ -195,4 +200,35 @@ void Renderer::initRenderData() {
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+}
+
+void Renderer::setWindowDimensions(int reqWidth, int reqHeight, int& width, int& height) {
+	if (reqWidth <= maxWindowWidth && reqHeight <= maxWindowHeight) {
+		width = reqWidth;
+		height = reqHeight;
+		return;
+	}
+
+	if (reqHeight * 1.0 / reqWidth * maxWindowWidth) {
+		width = maxWindowWidth;
+		height = reqHeight * 1.0 / reqWidth * width;
+		this->unitsPerPixel = reqWidth / width;
+	}
+	else {
+		height = maxWindowHeight;
+		width = reqWidth * 1.0 / reqHeight * height;
+		this->unitsPerPixel = reqHeight / height;
+	}
+}
+
+void Renderer::normalizeVertices(std::vector<float>& vertices) {
+	for (int i = 0; i + 2 < vertices.size(); i += 3) {
+		vertices[i] = vertices[i] / unitsPerPixel;
+		vertices[i + 1] = vertices[i + 1] / unitsPerPixel;
+	}
+}
+
+void Renderer::normalizeVertices(glm::vec2& position) {
+	position.x /= unitsPerPixel;
+	position.y /= unitsPerPixel;
 }

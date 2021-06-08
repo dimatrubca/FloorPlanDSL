@@ -177,7 +177,7 @@ Object* Evaluator::evalStructureStatement(StructureStatementNode* structureNode)
 		return wall;
 	}
 	else if (structureNode->structureType == BED) {
-		Bed* bed = new Bed(params);
+		Bed* bed = new Bed(params, env->rooms);
 
 		env->set(bed->id, bed);
 		return bed;
@@ -195,13 +195,13 @@ Object* Evaluator::evalStructureStatement(StructureStatementNode* structureNode)
 		return window;
 	}
 	else if (structureNode->structureType == TABLE) {
-		Table* table = new Table(params);
+		Table* table = new Table(params, env->rooms);
 
 		env->set(table->id, table);
 		return table;
 	}
 	else if (structureNode->structureType == CHAIR) {
-		Chair* chair = new Chair(params);
+		Chair* chair = new Chair(params, env->rooms);
 
 		env->set(chair->id, chair);
 		return chair;

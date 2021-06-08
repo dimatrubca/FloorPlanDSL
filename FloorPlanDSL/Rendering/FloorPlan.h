@@ -12,7 +12,6 @@
 class FloorPlan {
 public:
 	std::vector<GlDrawableObject*> drawableObjects;
-	unsigned int width, height;
 	FloorPlan(std::string sourceCodePath);
 	~FloorPlan();
 
@@ -25,6 +24,12 @@ public:
 	void build();
 
 private:
+	void setDimensions();
+	int maxWidthPixels = 1000, maxHeightPixels = 1000;
+	int width, height;
+	int widthUnits, heightUnits;
+	float unitsPerPixel;
+
 	std::string sourceCodePath;
 	Enviroment* env;
 };

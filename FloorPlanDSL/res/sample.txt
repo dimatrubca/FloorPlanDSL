@@ -1,21 +1,7 @@
-! 1000 x 500
-
-Wall(
-	id: "abd",
-	start: {150mm, 50mm},
-	end: {150mm, 200mm},
-	border: {15mm, black},
-);
-
-Wall(
-	id: "cc",
-	start: {200mm, 50mm},
-	end: {350mm, 50mm},
-	border: {15mm, black});
+! 5000 x 500
 
 
-
-float initialAngle = 90.0;
+float initialAngle = 45.0;
 
 
 Room( 
@@ -29,7 +15,28 @@ Bed(
 	id: "bed1", 
 	width: 40mm,
 	height: 50mm,
-	position: {150mm, 250mm}
+	position: {150mm, 250mm},
+	rotation: 0
+);
+
+Bed(
+	id: "bed2",
+	width: 30mm,
+	height: 40mm,
+	id_parent: "room1",
+	wall: 0,
+	start_on_wall: 20mm,
+	distance_wall: 30mm,
+);
+
+Table(
+	id: "table5",
+	width: 40mm,
+	height: 40mm,
+	id_parent: "room1",
+	wall: 2,
+	start_on_wall: 30mm,
+	distance_wall: 30mm,
 );
 
 Table(
