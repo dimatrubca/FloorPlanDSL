@@ -50,7 +50,7 @@ void Enviroment::set(std::string name, Object* object) {
 	}
 
 	if (auto chair = dynamic_cast<Chair*>(object)) {
-		chairs.push_back(chair);
+		chairs.push_back(chair);	
 	}
 }
 

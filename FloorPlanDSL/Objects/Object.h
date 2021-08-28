@@ -169,29 +169,6 @@ public:
 	void draw(Renderer& renderer);
 
 	void init() {
-		/*glGenVertexArrays(1, &this->VAO);
-		glGenBuffers(2, &this->VBO[0]);
-
-		glBindVertexArray(this->VAO);
-
-		// position buffer
-		glBindBuffer(GL_ARRAY_BUFFER, this->VBO[0]);
-		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
-		
-		std::cout << vertices.size() * sizeof(float) << "... " << '\n';
-		std::cout << sizeof(vertices) << '\n';	
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-		glEnableVertexAttribArray(0);
-
-		// color buffer
-		glBindBuffer(GL_ARRAY_BUFFER, this->VBO[1]);
-		glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(float), &colors[0], GL_STATIC_DRAW);
-
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-		glEnableVertexAttribArray(1);
-
-		// unbind VAO
-		glBindVertexArray(0);*/
 	}
 
 protected:

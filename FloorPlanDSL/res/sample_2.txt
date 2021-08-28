@@ -1,0 +1,175 @@
+! 35.0 x 30.0
+
+
+
+
+Room(
+	id: "star",
+	size: {10m,10m,10m,10m,10m,10m,10m,10m,10m,10m},
+	angles: {-36.0,36.0,252.0,36.0,252.0,36.0,252.0,36.0,252.0,36.0},
+	border: {30cm, yellow},
+	position: {20m, 17m},
+	label: "Star"
+);
+Door(
+	id: "door1",
+	id_parent: "star",
+	wall: 0,
+	start_on_wall: 5m,
+	length: 2m,
+);
+Door(
+	id: "door2",
+	id_parent: "star",
+	wall: 2,
+	start_on_wall:5m,
+	length: 2m,
+);
+Door(
+	id: "door3",
+	id_parent: "star",
+	wall: 4,
+	start_on_wall: 5m,
+	length: 2m,
+);
+
+Door(
+	id: "door4",
+	id_parent: "star",
+	wall: 6,
+	start_on_wall: 5m,
+	length: 2m,
+);
+Door(
+	id: "door5",
+	id_parent: "star",
+	wall: 8,
+	start_on_wall: 5m,
+	length: 2m,
+);
+Window(
+	id: "window2",
+	id_parent: "star",
+	wall: 1,
+	start_on_wall: 5m,
+	length: 4m,
+);
+Window(
+	id: "window3",
+	id_parent: "star",
+	wall: 3,
+	start_on_wall: 5m,
+	length: 4m,
+);
+Window(
+	id: "window4",
+	id_parent: "star",
+	wall: 5,
+	start_on_wall: 5m,
+	length: 4m,
+);
+Window(
+	id: "window5",
+	id_parent: "star",
+	wall: 7,
+	start_on_wall: 5m,
+	length: 4m,
+);
+Window(
+	id: "window1",
+	id_parent: "star",
+	wall: 9,
+	start_on_wall: 5m,
+	length: 4m,
+);
+
+Table(
+	id: "table1",
+	width: 2m,
+	height: 2m,
+	id_parent: "star",
+	wall: 1,
+	start_on_wall: 7m,
+	distance_wall: 2.5m,
+);
+Chair(
+	id: "chair1",
+	width: 1.2m,
+	height: 1.2m,
+	id_parent: "star",
+	wall: 1,
+	start_on_wall: 7m,
+	distance_wall: 1m
+);
+Table(
+	id: "table2",
+	width: 2m,
+	height: 2m,
+	id_parent: "star",
+	wall: 3,
+	start_on_wall: 7m,
+	distance_wall: 2.5m,
+);
+Chair(
+	id: "chair2",
+	width: 1.2m,
+	height: 1.2m,
+	id_parent: "star",
+	wall: 3,
+	start_on_wall: 7m,
+	distance_wall: 1m
+);
+Table(
+	id: "table3",
+	width: 2m,
+	height: 2m,
+	id_parent: "star",
+	wall: 5,
+	start_on_wall: 7m,
+	distance_wall: 2.5m,
+);
+Chair(
+	id: "chair3",
+	width: 1.2m,
+	height: 1.2m,
+	id_parent: "star",
+	wall: 5,
+	start_on_wall: 7m,
+	distance_wall: 1m
+);
+Table(
+	id: "table4",
+	width: 2m,
+	height: 2m,
+	id_parent: "star",
+	wall: 7,
+	start_on_wall: 7m,
+	distance_wall: 2.5m,
+);
+Chair(
+	id: "chair4",
+	width: 1.2m,
+	height: 1.2m,
+	id_parent: "star",
+	wall: 7,
+	start_on_wall: 7m,
+	distance_wall: 1m
+);
+Table(
+	id: "table5",
+	width: 2m,
+	height: 2m,
+	id_parent: "star",
+	wall: 9,
+	start_on_wall: 7m,
+	distance_wall: 2.5m,
+);
+Chair(
+	id: "chair2",
+	width: 1.2m,
+	height: 1.2m,
+	id_parent: "star",
+	wall: 9,
+	start_on_wall: 7m,
+	distance_wall: 1m
+);

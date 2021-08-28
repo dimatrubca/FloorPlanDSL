@@ -1,0 +1,77 @@
+! 65.0 x 50.0
+
+Room(
+	id: "bedRoom",
+	size: {7m, 7m, 7m, 7m, 7m,7m},
+	angles: {120.0,120.0, 120.0, 120.0,120.0,120.0},
+	border: {30cm, yellow},
+	position: {20m, 20m},
+	label: "Bed Room"
+);
+Room(
+	id: "bedRoom2",
+	size: {7m, 7m, 7m, 7m, 7m,7m},
+	angles: {120.0,120.0, 120.0, 120.0,120.0,120.0},
+	border: {30cm, yellow},
+	position: {30.65m, 14m-40cm},
+	label: "Bed Room 2"
+);
+Room(
+	id: "bedRoom3",
+	size: {7m, 7m, 7m, 7m, 7m,7m},
+	angles: {120.0,120.0, 120.0, 120.0,120.0,120.0},
+	border: {30cm, yellow},
+	position: {30.85m, 26m},
+	label: "Bed Room 3"
+);
+Door(
+	id: "door1",
+	id_parent: "bedRoom",
+	wall: 3,
+	start_on_wall: 2.25m,
+	length: 2.5m,
+);
+Door(
+	id: "door2",
+	id_parent: "bedRoom2",
+	wall: 1,
+	start_on_wall: 2.25m,
+	length: 2.5m,
+);
+Door(
+	id: "door3",
+	id_parent: "bedRoom3",
+	wall: 5,
+	start_on_wall: 2.25m,
+	length: 2.5m,
+);
+Bed(
+	id: "bed1",
+	width: 3m,
+	height: 3m,
+	id_parent: "bedRoom",
+	wall: 1,
+	start_on_wall: 1m,
+	distance_wall: 5m,
+	rotation: 90,
+);
+Bed(
+	id: "bed2",
+	width: 3m,
+	height: 3m,
+	id_parent: "bedRoom2",
+	wall: 5,
+	start_on_wall: 1m,
+	distance_wall: 4m,
+	rotation: 90,
+);
+Bed(
+	id: "bed3",
+	width: 3m,
+	height: 3m,
+	id_parent: "bedRoom3",
+	wall: 2,
+	start_on_wall: 1m,
+	distance_wall: 5m,
+	rotation: 90,
+);

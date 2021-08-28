@@ -18,15 +18,6 @@
     <ClCompile Include="Utils.h">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="mainRender.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="main2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Objects\Room.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -124,6 +115,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Rendering\TextRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -235,7 +229,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="res\sample.txt" />
+    <Text Include="res\sample_0.txt" />
+    <Text Include="res\sample_1.txt" />
+    <Text Include="res\sample_2.txt" />
+    <Text Include="res\sample_3.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\fragment.shader" />

@@ -1,8 +1,6 @@
 ! 65.0 x 50.0
 
-
 float initialAngle = 90.0;
-
 
 
 Room( 
@@ -14,11 +12,13 @@ Room(
 	label: "kitchen"
 );
 
+list roomBorder = {30cm, black};
+
 Room(
 	id: "livingRoom",
 	size: {40m, 25m, 40m, 24m},
 	angles: {initialAngle, 90.0, 90.0, 90.0},
-	border: {30cm, black},
+	border: roomBorder,
 	position: {15m + 30cm, 5m},
 	label: "Living Room"
 );
@@ -27,7 +27,7 @@ Room(
 	id: "bathroom",
 	size: {15m, 20m, 15m, 20m},
 	angles: {initialAngle, 90.0, 90.0, 90.0},
-	border: {30cm, black},
+	border: roomBorder,
 	position: {40m + 60cm, 5m},
 	label: "Bathroom"
 );
@@ -132,6 +132,16 @@ Bed(
 	rotation: 90,
 );
 
+Chair(
+	id: "chair5",
+	width: 1.5m,
+	height: 1.5m,
+	id_parent: "guestRoom",
+	wall: 1,
+	start_on_wall: 13m,
+	distance_wall: 4m,
+);
+
 Table(
 	id: "table1",
 	width: 2m,
@@ -228,7 +238,15 @@ Chair(
 	position: {250mm, 200mm},
 );
 
-
+Chair(
+	id: "table5",
+	width: 8m,
+	height: 3m,
+	id_parent: "bathroom",
+	wall: 2,
+	start_on_wall: 1m,
+	distance_wall: 1m,
+);
 
 
 Door(

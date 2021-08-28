@@ -38,13 +38,11 @@
     <ClCompile Include="Rendering\FloorPlan.cpp" />
     <ClCompile Include="Parsing\Lexer.cpp" />
     <ClCompile Include="Parsing\LexerError.cpp" />
-    <ClCompile Include="main2.cpp" />
-    <ClCompile Include="mainRender.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="Objects\Object.cpp" />
     <ClCompile Include="Objects\Room.cpp" />
     <ClCompile Include="Parsing\Parser.cpp" />
     <ClCompile Include="Parsing\ParserError.cpp" />
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="Rendering\DrawableObjects\GlDrawableObject.cpp" />
     <ClCompile Include="Rendering\Renderer.cpp" />
     <ClCompile Include="Rendering\MyResourceManager.cpp" />
@@ -95,7 +93,10 @@
     <ClInclude Include="Rendering\DrawableObjects\TriangleStripDrawable.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="res\sample.txt" />
+    <Text Include="res\sample_0.txt" />
+    <Text Include="res\sample_1.txt" />
+    <Text Include="res\sample_2.txt" />
+    <Text Include="res\sample_3.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\fragment.shader" />
