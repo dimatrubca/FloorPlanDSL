@@ -19,33 +19,100 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AST.cpp" />
-    <ClCompile Include="Enviroment.cpp" />
-    <ClCompile Include="Error.cpp" />
-    <ClCompile Include="Evaluator.cpp" />
-    <ClCompile Include="Error.h" />
-    <ClCompile Include="Lexer.cpp" />
-    <ClCompile Include="LexerError.cpp" />
-    <ClCompile Include="Object.cpp" />
-    <ClCompile Include="Parser.cpp" />
-    <ClCompile Include="ParserError.cpp" />
+    <ClCompile Include="Objects\Door.cpp" />
+    <ClCompile Include="Objects\IndoorObject.cpp" />
+    <ClCompile Include="Objects\Table.cpp" />
+    <ClCompile Include="Objects\Wall.cpp" />
+    <ClCompile Include="Objects\Window.cpp" />
+    <ClCompile Include="Parsing\AST.cpp" />
+    <ClCompile Include="Evaluation\Enviroment.cpp" />
+    <ClCompile Include="Parsing\Error.cpp" />
+    <ClCompile Include="Evaluation\Evaluator.cpp" />
+    <ClCompile Include="Parsing\Error.h" />
+    <ClCompile Include="Rendering\DrawableObjects\DrawableBed.cpp" />
+    <ClCompile Include="Rendering\DrawableObjects\DrawableDoor.cpp" />
+    <ClCompile Include="Rendering\DrawableObjects\DrawableIndoorObject.cpp" />
+    <ClCompile Include="Rendering\DrawableObjects\DrawableRoom.cpp" />
+    <ClCompile Include="Rendering\DrawableObjects\DrawableWall.cpp" />
+    <ClCompile Include="Rendering\DrawableObjects\DrawableWindow.cpp" />
+    <ClCompile Include="Rendering\FloorPlan.cpp" />
+    <ClCompile Include="Parsing\Lexer.cpp" />
+    <ClCompile Include="Parsing\LexerError.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Token.cpp" />
+    <ClCompile Include="Objects\Object.cpp" />
+    <ClCompile Include="Objects\Room.cpp" />
+    <ClCompile Include="Parsing\Parser.cpp" />
+    <ClCompile Include="Parsing\ParserError.cpp" />
+    <ClCompile Include="Rendering\DrawableObjects\GlDrawableObject.cpp" />
+    <ClCompile Include="Rendering\Renderer.cpp" />
+    <ClCompile Include="Rendering\MyResourceManager.cpp" />
+    <ClCompile Include="Rendering\Shader.cpp" />
+    <ClCompile Include="Parsing\Token.cpp" />
+    <ClCompile Include="Rendering\GlUtils.h" />
+    <ClCompile Include="Rendering\DrawableObjects\SpriteDrawable.cpp" />
+    <ClCompile Include="Rendering\TextRenderer.cpp" />
+    <ClCompile Include="Rendering\Texture2D.cpp" />
+    <ClCompile Include="Rendering\DrawableObjects\TriangleStripDrawable.cpp" />
     <ClCompile Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AST.h" />
-    <ClInclude Include="Enviroment.h" />
-    <ClInclude Include="Evaluator.h" />
-    <ClInclude Include="Lexer.h" />
-    <ClInclude Include="LexerError.h" />
-    <ClInclude Include="Object.h" />
-    <ClInclude Include="Parser.h" />
-    <ClInclude Include="ParserError.h" />
-    <ClInclude Include="Token.h" />
+    <ClInclude Include="Objects\Bed.h" />
+    <ClInclude Include="Objects\Chair.h" />
+    <ClInclude Include="Objects\Door.h" />
+    <ClInclude Include="Objects\IndoorObject.h" />
+    <ClInclude Include="Objects\Table.h" />
+    <ClInclude Include="Objects\Wall.h" />
+    <ClInclude Include="Objects\Window.h" />
+    <ClInclude Include="Parsing\AST.h" />
+    <ClInclude Include="Evaluation\Enviroment.h" />
+    <ClInclude Include="Evaluation\Evaluator.h" />
+    <ClInclude Include="Rendering\DrawableObjects\DrawableBed.h" />
+    <ClInclude Include="Rendering\DrawableObjects\DrawableChair.h" />
+    <ClInclude Include="Rendering\DrawableObjects\DrawableDoor.h" />
+    <ClInclude Include="Rendering\DrawableObjects\DrawableIndoorObject.h" />
+    <ClInclude Include="Rendering\DrawableObjects\DrawableTable.h" />
+    <ClInclude Include="Rendering\DrawableObjects\DrawableUtils.h" />
+    <ClInclude Include="Rendering\DrawableObjects\DrawableWall.h" />
+    <ClInclude Include="Rendering\DrawableObjects\DrawableWindow.h" />
+    <ClInclude Include="Rendering\DrawableObjects\GlDrawableObject.h" />
+    <ClInclude Include="Rendering\DrawableObjects\DrawableRoom.h" />
+    <ClInclude Include="Rendering\FloorPlan.h" />
+    <ClInclude Include="Parsing\Lexer.h" />
+    <ClInclude Include="Parsing\LexerError.h" />
+    <ClInclude Include="Rendering\MyResourceManager.h" />
+    <ClInclude Include="Objects\Object.h" />
+    <ClInclude Include="Objects\Room.h" />
+    <ClInclude Include="Parsing\Parser.h" />
+    <ClInclude Include="Parsing\ParserError.h" />
+    <ClInclude Include="Rendering\Renderer.h" />
+    <ClInclude Include="Rendering\Shader.h" />
+    <ClInclude Include="Parsing\Token.h" />
+    <ClInclude Include="Rendering\DrawableObjects\SpriteDrawable.h" />
+    <ClInclude Include="Rendering\TextRenderer.h" />
+    <ClInclude Include="Rendering\Texture2D.h" />
+    <ClInclude Include="Rendering\DrawableObjects\TriangleStripDrawable.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="res\sample.txt" />
+    <Text Include="res\sample_0.txt" />
+    <Text Include="res\sample_1.txt" />
+    <Text Include="res\sample_2.txt" />
+    <Text Include="res\sample_3.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shaders\fragment.shader" />
+    <None Include="res\shaders\spriteFragment.shader" />
+    <None Include="res\shaders\spriteVertex.shader" />
+    <None Include="res\shaders\textFragment.shader" />
+    <None Include="res\shaders\textVertex.shader" />
+    <None Include="res\shaders\vertex.shader" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\textures\bed.png" />
+    <Image Include="res\textures\chair.png" />
+    <Image Include="res\textures\table.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="res\fonts\arial.ttf" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -115,14 +182,17 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLEW_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\STB_IMAGE\include;$(SolutionDir)Dependencies\GLM\include;$(SolutionDir)Dependencies\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>freetype.lib;glew32s.lib;glfw3.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\GLFW\lib-vc2019;$(SolutionDir)Dependencies\GLEW\lib\Release\Win32;$(SolutionDir)Dependencies\freetype\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -131,16 +201,19 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLEW_STATIC;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\STB_IMAGE\include;$(SolutionDir)Dependencies\GLM\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glew32s.lib;glfw3.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\GLFW\lib-vc2019;$(SolutionDir)Dependencies\GLEW\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
